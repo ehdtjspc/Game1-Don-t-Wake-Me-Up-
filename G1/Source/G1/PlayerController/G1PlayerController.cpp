@@ -5,7 +5,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/KismetMathLibrary.h"
-
+#include "System/G1AssetManager.h"
+#include "Data/G1InputData.h"
+#include "G1GameplayTags.h"
 
 AG1PlayerController::AG1PlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -16,9 +18,12 @@ void AG1PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (auto* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	if (const UG1InputData* InputData = UG1AssetManager::GetAssetByName<UG1InputData>("InputData"))
 	{
-		Subsystem->AddMappingContext(InputMappingContext, 0);
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(InputData->InputMappingContext, 0);
+		}
 	}
 
 }
@@ -27,11 +32,15 @@ void AG1PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	if (auto* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
+	if (const UG1InputData* InputData = UG1AssetManager::GetAssetByName<UG1InputData>("InputData"))
 	{
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
-		EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Triggered, this, &ThisClass::Input_Turn);
+		UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 
+		auto Action1 = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_Move);
+		EnhancedInputComponent->BindAction(Action1, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
+
+		auto Action2 = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_Turn);
+		EnhancedInputComponent->BindAction(Action2, ETriggerEvent::Triggered, this, &ThisClass::Input_Turn);
 	}
 }
 

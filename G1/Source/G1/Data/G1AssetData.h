@@ -41,9 +41,23 @@ class G1_API UG1AssetData : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
+	virtual void PreSave(FObjectPreSaveContext ObjectSaveContext) override;   //  
+
+public:
+	FSoftObjectPath GetAssetPathByName(const FName& AssetName);
+	const FAssetSet& GetAssetSetByLabel(const FName& Label);
+
 
 private:
 	UPROPERTY(EditDefaultsOnly)
 	TMap<FName, FAssetSet> AssetGroupNameToSet;
+
+	UPROPERTY()
+	TMap<FName, FSoftObjectPath> AssetNameToPath;
+
+	UPROPERTY()
+	TMap<FName, FAssetSet> AssetLabelToSet;
+
+
 
 };
