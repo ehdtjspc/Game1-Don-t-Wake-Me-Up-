@@ -8,6 +8,7 @@
 #include "G1AssetManager.generated.h"
 
 class UG1AssetData;
+DECLARE_DELEGATE_TwoParams(FAsyncLoadCompletedDelegate, const FName&/*AssetName or Label*/, UObject*/*LoadedAsset*/);
 
 /**
  * 
@@ -32,6 +33,10 @@ public:
 	static void LoadSyncByPath(const FSoftObjectPath& AssetPath);
 	static void LoadSyncByName(const FName& AssetName);
 	static void LoadSyncByLabel(const FName& Label);
+
+	//비동기 방식
+	static void LoadAsyncByPath(const FSoftObjectPath& AssetPath, FAsyncLoadCompletedDelegate CompletedDelegate = FAsyncLoadCompletedDelegate());
+	static void LoadAsyncByName(const FName& AssetName, FAsyncLoadCompletedDelegate CompletedDelegate = FAsyncLoadCompletedDelegate());
 
 	// 부분적으로 어떤 에셋을 버리고 다시 로드하고 맵 이동했으면 그런 부분을 처리할 때 이용
 	static void ReleaseByPath(const FSoftObjectPath& AssetPath);

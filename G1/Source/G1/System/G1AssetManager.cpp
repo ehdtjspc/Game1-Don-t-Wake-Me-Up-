@@ -122,6 +122,54 @@ void UG1AssetManager::LoadSyncByLabel(const FName& Label)
 	}
 }
 
+void UG1AssetManager::LoadAsyncByPath(const FSoftObjectPath& AssetPath, FAsyncLoadCompletedDelegate CompletedDelegate)
+{
+	if (UAssetManager::IsInitialized() == false)
+	{
+		UE_LOG(LogTemp, Error, TEXT("AssetManager must be initialized"));
+		return;
+	}
+
+	if (AssetPath.IsValid())
+	{
+		if (UObject* LoadedAsset = AssetPath.ResolveObject())
+		{
+			Get().AddLoadedAsset(AssetPath.GetAssetFName(), LoadedAsset);
+		}
+		else
+		{
+			TArray<FSoftObjectPath> AssetPaths;
+			AssetPaths.Add(AssetPath);
+
+			TSharedPtr<FStreamableHandle> Handle = GetStreamableManager().RequestAsyncLoad(AssetPaths);
+
+			Handle->BindCompleteDelegate(FStreamableDelegate::CreateLambda([AssetName = AssetPath.GetAssetFName(), AssetPath, CompleteDelegate = MoveTemp(CompletedDelegate)]()
+				{
+					UObject* LoadedAsset = AssetPath.ResolveObject();
+					Get().AddLoadedAsset(AssetName, LoadedAsset);
+					if (CompleteDelegate.IsBound())
+						CompleteDelegate.Execute(AssetName, LoadedAsset);
+				}));
+		}
+	}
+}
+
+void UG1AssetManager::LoadAsyncByName(const FName& AssetName, FAsyncLoadCompletedDelegate CompletedDelegate)
+{
+	if (UAssetManager::IsInitialized() == false)
+	{
+		UE_LOG(LogTemp, Error, TEXT("AssetManager must be initialized"));
+		return;
+	}
+
+	UG1AssetData* AssetData = Get().LoadedAssetData;
+	check(AssetData);
+
+	const FSoftObjectPath& AssetPath = AssetData->GetAssetPathByName(AssetName);
+	LoadAsyncByPath(AssetPath, CompletedDelegate);
+}
+
+
 
 void UG1AssetManager::ReleaseByPath(const FSoftObjectPath& AssetPath)
 {

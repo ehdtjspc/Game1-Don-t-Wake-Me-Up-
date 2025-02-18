@@ -8,6 +8,7 @@
 #include "System/G1AssetManager.h"
 #include "Data/G1InputData.h"
 #include "G1GameplayTags.h"
+#include "Character/Player/G1Player.h"
 
 AG1PlayerController::AG1PlayerController(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -41,6 +42,10 @@ void AG1PlayerController::SetupInputComponent()
 
 		auto Action2 = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_Turn);
 		EnhancedInputComponent->BindAction(Action2, ETriggerEvent::Triggered, this, &ThisClass::Input_Turn);
+
+		auto Action3 = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_Jump);
+		EnhancedInputComponent->BindAction(Action3, ETriggerEvent::Triggered, this, &ThisClass::Input_Jump);
+
 	}
 }
 
@@ -70,4 +75,12 @@ void AG1PlayerController::Input_Turn(const FInputActionValue& InputValue)
 {
 	float Val = InputValue.Get<float>();
 	AddYawInput(Val);
+}
+
+void AG1PlayerController::Input_Jump(const FInputActionValue& InputValue)
+{
+	if (AG1Player* BearSell = Cast<AG1Player>(GetPawn()))
+	{
+		BearSell->Jump();
+	}
 }
