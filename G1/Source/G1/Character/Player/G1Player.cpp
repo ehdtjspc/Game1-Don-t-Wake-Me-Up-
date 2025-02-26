@@ -3,18 +3,28 @@
 
 #include "Character/Player/G1Player.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 
 AG1Player::AG1Player()
 {
+
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 640.f, 0.f);
+
 	SpringArem = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArem"));
 	SpringArem->SetupAttachment(GetCapsuleComponent());
 	SpringArem->TargetArmLength = 800.0f;
-	SpringArem->SetRelativeRotation(FRotator(-40, 0, 0));
+	SpringArem->SetRelativeRotation(FRotator(-60, 0, 0));
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArem);
+	Camera->bUsePawnControlRotation = false;
 	
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -88.f), FRotator(0.f, -90.f, 0.f));
 }

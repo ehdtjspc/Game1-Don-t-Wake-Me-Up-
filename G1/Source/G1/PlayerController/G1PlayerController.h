@@ -7,6 +7,7 @@
 #include "G1PlayerController.generated.h"
 
 struct FInputActionValue;
+class UNiagaraSystem;
 
 /**
  *
@@ -23,14 +24,25 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
-
 private:
-	void Input_Move(const FInputActionValue& InputValue);
-	void Input_Turn(const FInputActionValue& InputValue);
-	void Input_Jump(const FInputActionValue& InputValue);
+	
+	void OnInputStarted();
+	void OnSetDestinationTriggered();
+	void OnSetDestinationReleased();
 
 
+public:
 
-protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	float ShortPressThreshold = 0.3f;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Input)
+	TObjectPtr<UNiagaraSystem> FXCursor;
+	
+private:
+	FVector CachedDestination;
+	float FollowTime;
+
+
 	
 };
