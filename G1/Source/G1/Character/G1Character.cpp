@@ -32,3 +32,13 @@ void AG1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
+void AG1Character::Highlight()
+{
+	bHighlighted = true;
+}
+
+void AG1Character::UnHighlight()
+{
+	bHighlighted = false;
+}
+

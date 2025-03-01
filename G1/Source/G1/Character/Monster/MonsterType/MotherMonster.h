@@ -3,23 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Character/G1Character.h"
-#include "G1Monster.generated.h"
+#include "Character/Monster/G1Monster.h"
+#include "MotherMonster.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class G1_API AG1Monster : public AG1Character
+class G1_API AMotherMonster : public AG1Monster
 {
 	GENERATED_BODY()
+
 public:
-	AG1Monster();
+	AMotherMonster();
 
 protected:
 	virtual void BeginPlay() override;
 
 public:
 	virtual void Tick(float DeltaTime) override;
-	
+
 };

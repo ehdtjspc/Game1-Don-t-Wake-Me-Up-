@@ -58,6 +58,59 @@ void AG1PlayerController::SetupInputComponent()
 	}
 }
 
+void AG1PlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+	
+	TickCursorTrace();
+
+}
+
+void AG1PlayerController::TickCursorTrace()
+{
+	if (bMousePressed)
+	{
+		return;
+	}
+
+	FHitResult OutCursorHit;
+	if (GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, OUT OutCursorHit) == false)
+	{
+		return;
+	}
+
+	AG1Character* LocalHighlightActor = Cast<AG1Character>(OutCursorHit.GetActor());
+	if (LocalHighlightActor == nullptr)
+	{
+		// 있었는데 없어지는 상황
+		if (HighlightActor)
+		{
+			HighlightActor->UnHighlight();
+		}
+	}
+	else
+	{
+		if (HighlightActor)
+		{
+			// 원래 있었는데 ,다른 애로 교체함
+			if (HighlightActor != LocalHighlightActor)
+			{
+				HighlightActor->UnHighlight();
+				LocalHighlightActor->Highlight();
+			}
+
+			//동일한 애라면 무시한다.
+		}
+		else
+		{
+			//원래 없었고 새로운 타겟
+			LocalHighlightActor->Highlight();
+		}
+	}
+
+	HighlightActor = LocalHighlightActor;
+}
+
 void AG1PlayerController::OnInputStarted()
 {
 	StopMovement();

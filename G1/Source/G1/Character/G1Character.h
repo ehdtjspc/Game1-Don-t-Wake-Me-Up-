@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interface/G1HighlightInterface.h"
 #include "G1Character.generated.h"
 
 UCLASS()
-class G1_API AG1Character : public ACharacter
+class G1_API AG1Character : public ACharacter , public IG1HighlightInterface
 {
 	GENERATED_BODY()
 
@@ -25,5 +26,14 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+public:
+	virtual void Highlight() override;
+	virtual void UnHighlight() override;
+
+protected:
+	UPROPERTY(BlueprintReadOnly)
+	bool bHighlighted = false;
+	
 
 };

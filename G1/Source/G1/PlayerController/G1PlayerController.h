@@ -23,6 +23,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
+	virtual void PlayerTick(float DeltaTime) override;
+
+private:
+	void TickCursorTrace();
 
 private:
 	
@@ -42,7 +46,15 @@ public:
 private:
 	FVector CachedDestination;
 	float FollowTime;
+	bool bMousePressed = false;
 
+
+protected:
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<class AG1Character> TargetActor;
+
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<class AG1Character> HighlightActor;
 
 	
 };
