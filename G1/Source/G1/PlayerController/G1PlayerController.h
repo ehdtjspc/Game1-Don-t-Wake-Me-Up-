@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "G1Define.h"
 #include "G1PlayerController.generated.h"
 
 struct FInputActionValue;
@@ -27,12 +28,16 @@ protected:
 
 private:
 	void TickCursorTrace();
-
+	void ChaseTargetAndAttack();
 private:
 	
 	void OnInputStarted();
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
+
+	ECreatureState GetCreatureState();
+	void SetCreatureState(ECreatureState InState);
+
 
 
 public:
@@ -55,6 +60,12 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<class AG1Character> HighlightActor;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class UAnimMontage> AttackMontage;
+
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<class AG1Player> G1Player;
 
 	
 };

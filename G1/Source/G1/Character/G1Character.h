@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Interface/G1HighlightInterface.h"
+#include "G1Define.h"
 #include "G1Character.generated.h"
 
 UCLASS()
@@ -34,6 +35,11 @@ public:
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighlighted = false;
+
+public:
+
+	UPROPERTY(BlueprintReadWrite)
+	ECreatureState CreatureState = ECreatureState::Moving;
 	
 
 };

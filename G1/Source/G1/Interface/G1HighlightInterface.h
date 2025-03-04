@@ -22,6 +22,6 @@ class G1_API IG1HighlightInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void Highlight() = 0;
-	virtual void UnHighlight() = 0;
+	virtual void Highlight() = 0;        //순수 가상 함수
+	virtual void UnHighlight() = 0;       //순수 가상 함수
 };
