@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "PlayerController/G1PlayerController.h"
 
 AG1Player::AG1Player()
 {
@@ -37,4 +38,14 @@ void AG1Player::BeginPlay()
 void AG1Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AG1Player::HandleGameplayEvent(FGameplayTag EventTag)
+{
+	AG1PlayerController* PC = Cast<AG1PlayerController>(GetController());
+
+	if (PC)
+	{
+		PC->HandleGameplayEvent(EventTag);
+	}
 }

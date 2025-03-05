@@ -75,6 +75,17 @@ void AG1PlayerController::PlayerTick(float DeltaTime)
 
 }
 
+void AG1PlayerController::HandleGameplayEvent(FGameplayTag EventTag)
+{
+	if (EventTag.MatchesTag(G1GameplayTags::Event_Montage_Attack))
+	{
+		if (TargetActor)
+		{
+			TargetActor->OnDamaged(G1Player->FinalDamage, G1Player);
+		}
+	}
+}
+
 void AG1PlayerController::TickCursorTrace()
 {
 	if (bMousePressed)
@@ -143,6 +154,8 @@ void AG1PlayerController::ChaseTargetAndAttack()
 			if (bMousePressed)
 			{
 				//if (GetCharacter()->GetMesh()->GetAnimInstance()->Montage_IsPlaying(nullptr) == false)
+				//TargetActor->OnDamaged(G1Player->FinalDamage,G1Player);
+
 
 				FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(G1Player->GetActorLocation(), TargetActor->GetActorLocation());
 				G1Player->SetActorRotation(Rotator);
