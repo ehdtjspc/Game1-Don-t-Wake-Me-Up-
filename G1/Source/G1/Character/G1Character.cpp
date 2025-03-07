@@ -6,6 +6,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "G1Define.h"
+#include "Components/WidgetComponent.h"
+#include "UI/G1HpBarUI.h"
 
 
 // Sets default values
@@ -14,13 +16,25 @@ AG1Character::AG1Character()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	HpBarComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"));
+	HpBarComponent->SetupAttachment(GetRootComponent());
+
+	ConstructorHelpers::FClassFinder<UUserWidget> HealthBarWidgetClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/BluePrint/UI/WBP_HpBar.WBP_HpBar_C'"));
+	if (HealthBarWidgetClass.Succeeded())
+	{
+		HpBarComponent->SetWidgetClass(HealthBarWidgetClass.Class);
+		HpBarComponent->SetWidgetSpace(EWidgetSpace::Screen);
+		HpBarComponent->SetDrawAtDesiredSize(true);
+		HpBarComponent->SetRelativeLocation(FVector(0, 0, 110));
+	}
+
 }
 
 // Called when the game starts or when spawned
 void AG1Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	RefreshHpBarRatio();
 }
 
 // Called every frame
@@ -63,7 +77,9 @@ void AG1Character::OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker)
 		OnDead(Attacker);
 	}
 
-	D(FString::Printf(TEXT("%d"), Hp));
+	//D(FString::Printf(TEXT("%d"), Hp));
+	RefreshHpBarRatio();
+
 
 }
 
@@ -72,6 +88,16 @@ void AG1Character::OnDead(TObjectPtr<AG1Character> Attacker)
 	if (CreatureState == ECreatureState::Dead)
 	{
 		CreatureState = ECreatureState::Dead;
+	}
+}
+
+void AG1Character::RefreshHpBarRatio()
+{
+	if (HpBarComponent)
+	{
+		float Ratio = static_cast<float>(Hp) / MaxHp;
+		UG1HpBarUI* HpBar =Cast<UG1HpBarUI>(HpBarComponent->GetUserWidgetObject());
+		HpBar->SetHpRatio(Ratio);
 	}
 }
 
