@@ -7,6 +7,9 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "PlayerController/G1PlayerController.h"
+#include "AbilitySystem/G1AbilitySystemComponent.h"
+#include "Character/Player/G1PlayerState.h"
+#include "AbilitySystem/Attributes/G1PlayerSet.h"
 
 AG1Player::AG1Player()
 {
@@ -33,6 +36,26 @@ AG1Player::AG1Player()
 void AG1Player::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void AG1Player::PossessedBy(AController* NewController)  //여기부분이 BeginPlay보다 먼저 실행이된다.
+{
+	Super::PossessedBy(NewController);
+
+	InitAbilitySystem();
+}
+
+void AG1Player::InitAbilitySystem()
+{
+	Super::InitAbilitySystem();
+
+	if (AG1PlayerState* PS = GetPlayerState<AG1PlayerState>())
+	{
+		AbilitySystemComponent = Cast<UG1AbilitySystemComponent>(PS->GetAbilitySystemComponent());
+		AbilitySystemComponent->InitAbilityActorInfo(PS, this);
+
+		AttributeSet = PS->GetG1PlayerSet();
+	}
 }
 
 void AG1Player::Tick(float DeltaTime)

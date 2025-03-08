@@ -12,7 +12,20 @@ public class G1 : ModuleRules
 			"G1"
 		});
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput","GameplayTags", "NavigationSystem", "AIModule", "Niagara","UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] {
+			"Core",
+			"CoreUObject", 
+			"Engine",
+			"InputCore",
+			"EnhancedInput",
+			"GameplayTags",
+			"GameplayTasks",
+			"GameplayAbilities",
+			"NavigationSystem",
+			"AIModule",
+			"Niagara",
+			"UMG",
+		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

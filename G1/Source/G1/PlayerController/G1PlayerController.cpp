@@ -81,7 +81,7 @@ void AG1PlayerController::HandleGameplayEvent(FGameplayTag EventTag)
 	{
 		if (TargetActor)
 		{
-			TargetActor->OnDamaged(G1Player->FinalDamage, G1Player);
+			TargetActor->OnDamaged(10, G1Player);
 		}
 	}
 }

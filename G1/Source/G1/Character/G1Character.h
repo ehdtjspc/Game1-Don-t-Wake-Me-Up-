@@ -7,10 +7,11 @@
 #include "Interface/G1HighlightInterface.h"
 #include "G1Define.h"
 #include "GameplayTagContainer.h"
+#include "AbilitySystemInterface.h"
 #include "G1Character.generated.h"
 
 UCLASS()
-class G1_API AG1Character : public ACharacter , public IG1HighlightInterface
+class G1_API AG1Character : public ACharacter , public IG1HighlightInterface,public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -39,6 +40,11 @@ public:
 	virtual void OnDead(TObjectPtr<AG1Character> Attacker);
 
 	void RefreshHpBarRatio();
+	
+
+public:
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	virtual void InitAbilitySystem();
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -49,18 +55,16 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	ECreatureState CreatureState = ECreatureState::Moving;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	int32 Hp = 100;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MaxHp = 100;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 FinalDamage = 10;
-
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<class UWidgetComponent> HpBarComponent;
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UG1AbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UG1AttributeSet> AttributeSet;
 	
 
 };

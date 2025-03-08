@@ -8,6 +8,8 @@
 #include "G1Define.h"
 #include "Components/WidgetComponent.h"
 #include "UI/G1HpBarUI.h"
+#include "AbilitySystem/G1AbilitySystemComponent.h"
+#include "AbilitySystem/Attributes/G1AttributeSet.h"
 
 
 // Sets default values
@@ -71,7 +73,12 @@ void AG1Character::UnHighlight()
 
 void AG1Character::OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker)
 {
+	float Hp = AttributeSet->GetHealth();
+	float MaxHp = AttributeSet->GetMaxHealth();
+
 	Hp = FMath::Clamp(Hp - Damage, 0, MaxHp);
+	AttributeSet->SetHealth(Hp);
+
 	if (Hp == 0)
 	{
 		OnDead(Attacker);
@@ -93,11 +100,24 @@ void AG1Character::OnDead(TObjectPtr<AG1Character> Attacker)
 
 void AG1Character::RefreshHpBarRatio()
 {
-	if (HpBarComponent)
+	if (HpBarComponent && AttributeSet)
 	{
+		float Hp = AttributeSet->GetHealth();
+		float MaxHp = AttributeSet->GetMaxHealth();
+
 		float Ratio = static_cast<float>(Hp) / MaxHp;
 		UG1HpBarUI* HpBar =Cast<UG1HpBarUI>(HpBarComponent->GetUserWidgetObject());
 		HpBar->SetHpRatio(Ratio);
 	}
+}
+
+UAbilitySystemComponent* AG1Character::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+void AG1Character::InitAbilitySystem()
+{
+
 }
 
