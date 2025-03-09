@@ -66,5 +66,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UG1AttributeSet> AttributeSet;
 	
+public:
+	void AddCharacterAbilities();
+
+	UPROPERTY(EditAnywhere,Category=Abilities)
+	TArray<TSubclassOf<class UGameplayAbility>> StartupAbilities;
 
 };

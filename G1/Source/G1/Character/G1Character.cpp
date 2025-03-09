@@ -37,6 +37,8 @@ void AG1Character::BeginPlay()
 {
 	Super::BeginPlay();
 	RefreshHpBarRatio();
+
+	AddCharacterAbilities();
 }
 
 // Called every frame
@@ -119,5 +121,16 @@ UAbilitySystemComponent* AG1Character::GetAbilitySystemComponent() const
 void AG1Character::InitAbilitySystem()
 {
 
+}
+
+void AG1Character::AddCharacterAbilities()
+{
+	UG1AbilitySystemComponent* ASC =Cast<UG1AbilitySystemComponent>(AbilitySystemComponent);
+	if (ASC == nullptr)
+	{
+		return;
+	}
+
+	ASC->AddCharacterAbilities(StartupAbilities);
 }
 

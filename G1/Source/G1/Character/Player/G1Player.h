@@ -35,5 +35,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UCameraComponent> Camera;
 
+protected:
+	// TEMP
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class UGameplayEffect> TestEffect;
+
+public:
+
+	void ActivateAbility(FGameplayTag AbilityTag);
 	
 };

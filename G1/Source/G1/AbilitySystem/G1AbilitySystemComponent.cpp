@@ -3,3 +3,26 @@
 
 #include "AbilitySystem/G1AbilitySystemComponent.h"
 
+void UG1AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& StartupAbilities)
+{
+	for (auto& AbilityClass : StartupAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		FGameplayAbilitySpecHandle SpecHandle = GiveAbility(AbilitySpec);
+
+		auto& a = ActivatableAbilities;
+
+		//TryActivateAbility(SpecHandle);
+		//GiveAbilityAndActivateOnce(AbilitySpec);
+		SpecHandles.Add(SpecHandle);
+	}
+}
+
+void UG1AbilitySystemComponent::ActivateAbility(FGameplayTag AbilityTag)
+{
+	for (FGameplayAbilitySpecHandle& SpecHandle : SpecHandles)
+	{
+		// TODO
+		TryActivateAbility(SpecHandle);
+	}
+}

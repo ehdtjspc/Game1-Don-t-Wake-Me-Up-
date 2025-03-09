@@ -36,6 +36,17 @@ AG1Player::AG1Player()
 void AG1Player::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (TestEffect && AbilitySystemComponent)
+	{
+		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+		EffectContext.AddSourceObject(this);
+
+		FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(TestEffect, 1, EffectContext);
+
+		AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+	}
+
 }
 
 void AG1Player::PossessedBy(AController* NewController)  //여기부분이 BeginPlay보다 먼저 실행이된다.
@@ -71,4 +82,9 @@ void AG1Player::HandleGameplayEvent(FGameplayTag EventTag)
 	{
 		PC->HandleGameplayEvent(EventTag);
 	}
+}
+
+void AG1Player::ActivateAbility(FGameplayTag AbilityTag)
+{
+	AbilitySystemComponent->ActivateAbility(AbilityTag);
 }

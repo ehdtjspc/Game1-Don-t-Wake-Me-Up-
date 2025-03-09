@@ -148,8 +148,7 @@ void AG1PlayerController::ChaseTargetAndAttack()
 	{
 		GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Cyan, TEXT("Attack"));
 
-		if (AttackMontage)
-		{
+	
 			
 			if (bMousePressed)
 			{
@@ -160,7 +159,8 @@ void AG1PlayerController::ChaseTargetAndAttack()
 				FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(G1Player->GetActorLocation(), TargetActor->GetActorLocation());
 				G1Player->SetActorRotation(Rotator);
 
-				GetCharacter()->PlayAnimMontage(AttackMontage);
+				G1Player->ActivateAbility(G1GameplayTags::Ability_Attack);
+
 				SetCreatureState(ECreatureState::Skill);
 
 				TargetActor = HighlightActor;
@@ -169,7 +169,7 @@ void AG1PlayerController::ChaseTargetAndAttack()
 			{
 				TargetActor = nullptr;
 			}
-		}
+		
 
 
 	}
