@@ -36,9 +36,14 @@ private:
 	void ChaseTargetAndAttack();
 private:
 	
-	void OnInputStarted();
-	void OnSetDestinationTriggered();
-	void OnSetDestinationReleased();
+	void OnMoveStarted();
+	void OnMoveTriggered();
+	void OnMoveReleased();
+
+	void OnAttackStarted();
+	void OnAttackTriggered();
+	void OnAttackReleased();
+
 
 	ECreatureState GetCreatureState();
 	void SetCreatureState(ECreatureState InState);
@@ -52,6 +57,9 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Input)
 	TObjectPtr<UNiagaraSystem> FXCursor;
+
+
+
 	
 private:
 	FVector CachedDestination;
@@ -71,6 +79,11 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<class AG1Player> G1Player;
+
+
+	float AttackRange = 500.f;
+
+
 
 	
 };

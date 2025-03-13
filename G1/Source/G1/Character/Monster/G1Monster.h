@@ -24,5 +24,7 @@ public:
 	
 	virtual void InitAbilitySystem() override;
 
+	virtual void OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker) override;
+
 
 };

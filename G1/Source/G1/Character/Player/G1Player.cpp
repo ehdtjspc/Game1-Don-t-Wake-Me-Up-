@@ -11,6 +11,7 @@
 #include "Character/Player/G1PlayerState.h"
 #include "AbilitySystem/Attributes/G1PlayerSet.h"
 
+
 AG1Player::AG1Player()
 {
 
@@ -30,6 +31,11 @@ AG1Player::AG1Player()
 	Camera->SetupAttachment(SpringArem);
 	Camera->bUsePawnControlRotation = false;
 	
+	AttackScope = CreateDefaultSubobject<USceneComponent>(TEXT("AttackScope"));
+	AttackScope->SetupAttachment(GetCapsuleComponent());
+	AttackScope->AddRelativeLocation(FVector(130, 0, 0));
+	
+
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -88.f), FRotator(0.f, -90.f, 0.f));
 }
 

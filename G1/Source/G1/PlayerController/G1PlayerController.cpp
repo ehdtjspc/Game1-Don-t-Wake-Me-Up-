@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "PlayerController/G1PlayerController.h"
@@ -12,6 +12,9 @@
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Character/Monster/G1Monster.h"
+
 
 
 AG1PlayerController::AG1PlayerController(const FObjectInitializer& ObjectInitializer)
@@ -47,14 +50,19 @@ void AG1PlayerController::SetupInputComponent()
 	{
 		UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 
-		auto Action1 = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_SetDestination);
+		auto ActionMove = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_SetDestination);
+		auto ActionAttack = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_BasicAttack);
 
 		// Setup mouse input events
-		EnhancedInputComponent->BindAction(Action1, ETriggerEvent::Started, this, &ThisClass::OnInputStarted);
-		EnhancedInputComponent->BindAction(Action1, ETriggerEvent::Triggered, this, &ThisClass::OnSetDestinationTriggered);
-		EnhancedInputComponent->BindAction(Action1, ETriggerEvent::Completed, this, &ThisClass::OnSetDestinationReleased);
-		EnhancedInputComponent->BindAction(Action1, ETriggerEvent::Canceled, this, &ThisClass::OnSetDestinationReleased);
+		EnhancedInputComponent->BindAction(ActionMove, ETriggerEvent::Started, this, &ThisClass::OnMoveStarted);
+		EnhancedInputComponent->BindAction(ActionMove, ETriggerEvent::Triggered, this, &ThisClass::OnMoveTriggered);
+		EnhancedInputComponent->BindAction(ActionMove, ETriggerEvent::Completed, this, &ThisClass::OnMoveReleased);
+		EnhancedInputComponent->BindAction(ActionMove, ETriggerEvent::Canceled, this, &ThisClass::OnMoveReleased);
 
+		EnhancedInputComponent->BindAction(ActionAttack, ETriggerEvent::Started, this, &ThisClass::OnAttackStarted);
+		EnhancedInputComponent->BindAction(ActionAttack, ETriggerEvent::Triggered, this, &ThisClass::OnAttackTriggered);
+		EnhancedInputComponent->BindAction(ActionAttack, ETriggerEvent::Completed, this, &ThisClass::OnAttackReleased);
+		EnhancedInputComponent->BindAction(ActionAttack, ETriggerEvent::Canceled, this, &ThisClass::OnAttackReleased);
 
 
 	}
@@ -66,7 +74,6 @@ void AG1PlayerController::PlayerTick(float DeltaTime)
 	
 	TickCursorTrace();
 
-	ChaseTargetAndAttack();
 
 	if (GetCharacter()->GetMesh()->GetAnimInstance()->Montage_IsPlaying(nullptr) == false)
 	{
@@ -79,9 +86,43 @@ void AG1PlayerController::HandleGameplayEvent(FGameplayTag EventTag)
 {
 	if (EventTag.MatchesTag(G1GameplayTags::Event_Montage_Attack))
 	{
-		if (TargetActor)
+		// 라인 트레이스 시작 위치 및 방향 설정
+		FVector StartLocation = G1Player->GetActorLocation();
+		FVector ForwardVector = G1Player->GetActorForwardVector();
+		FVector EndLocation = StartLocation + ForwardVector * 150.0f; // 캐릭터 전방 150 위치
+		// 라인 트레이스 수행
+		TArray<FHitResult> HitResults; // 여러 개의 트레이스 결과를 저장할 배열
+
+		TArray<AActor*> ActorsToIgnore;
+		ActorsToIgnore.Add(G1Player); // G1Player를 무시 목록에 추가
+
+		if (UKismetSystemLibrary::SphereTraceMulti(GetWorld(), StartLocation, EndLocation, 50.0f, UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true))
 		{
-			TargetActor->OnDamaged(10, G1Player);
+			for (FHitResult HitResult : HitResults)
+			{
+				AActor* HitActor = HitResult.GetActor();
+
+				if (HitActor) // HitActor 유효성 확인
+				{
+					AG1Monster* Monster = Cast<AG1Monster>(HitActor); // AG1Monster 타입으로 캐스팅
+					if (Monster) // 캐스팅 성공 확인
+					{
+						// HitActor가 몬스터 타입인지 확인 (예시: AMonster 클래스)
+						if (HitActor->IsA(AG1Monster::StaticClass()))
+						{
+							// 플레이어와 타격 대상 사이의 거리 계산
+							float Distance = FVector::Dist(G1Player->GetActorLocation(), HitActor->GetActorLocation());
+
+							// 거리가 150 이하일 경우에만 OnDamaged 호출
+							if (Distance <= 160.0f)
+							{
+								// OnDamaged 함수 호출
+								Monster->OnDamaged(10, G1Player);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -102,7 +143,7 @@ void AG1PlayerController::TickCursorTrace()
 	AG1Character* LocalHighlightActor = Cast<AG1Character>(OutCursorHit.GetActor());
 	if (LocalHighlightActor == nullptr)
 	{
-		// �־��µ� �������� ��Ȳ
+		// 있었는데 없어지는 상황
 		if (HighlightActor)
 		{
 			HighlightActor->UnHighlight();
@@ -112,18 +153,18 @@ void AG1PlayerController::TickCursorTrace()
 	{
 		if (HighlightActor)
 		{
-			// ���� �־��µ� ,�ٸ� �ַ� ��ü��
+			// 원래 있었는데 ,다른 애로 교체함
 			if (HighlightActor != LocalHighlightActor)
 			{
 				HighlightActor->UnHighlight();
 				LocalHighlightActor->Highlight();
 			}
 
-			//������ �ֶ�� �����Ѵ�.
+			//동일한 애라면 무시한다.
 		}
 		else
 		{
-			//���� ������ ���ο� Ÿ��
+			//원래 없었고 새로운 타겟
 			LocalHighlightActor->Highlight();
 		}
 	}
@@ -133,62 +174,55 @@ void AG1PlayerController::TickCursorTrace()
 
 void AG1PlayerController::ChaseTargetAndAttack()
 {
-	if (TargetActor == nullptr)
-	{
-		return;
-	}
-
 	if (GetCreatureState() == ECreatureState::Skill)
 	{
 		return;
 	}
+	StopMovement();
 
-	FVector Direction = TargetActor->GetActorLocation() - G1Player->GetActorLocation();
-	if (Direction.Length() < 400.f)     //�Ÿ� �ȿ� ������ ���� 
+	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Cyan, TEXT("Attack"));
+
+	// We look for the location in the world where the player has pressed the input
+	FHitResult Hit;
+	bool bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, OUT Hit);
+	// If we hit a surface, cache the location
+	if (bHitSuccessful)
 	{
-		GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Cyan, TEXT("Attack"));
-
-	
-			
-			if (bMousePressed)
-			{
-				//if (GetCharacter()->GetMesh()->GetAnimInstance()->Montage_IsPlaying(nullptr) == false)
-				//TargetActor->OnDamaged(G1Player->FinalDamage,G1Player);
-
-
-				FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(G1Player->GetActorLocation(), TargetActor->GetActorLocation());
-				G1Player->SetActorRotation(Rotator);
-
-				G1Player->ActivateAbility(G1GameplayTags::Ability_Attack);
-
-				SetCreatureState(ECreatureState::Skill);
-
-				TargetActor = HighlightActor;
-			}
-			else
-			{
-				TargetActor = nullptr;
-			}
-		
-
-
+		CachedDestination = Hit.Location;
 	}
-	else          //�ƴϸ� ���󰡱�
-	{
-		FVector WorldDirection = Direction.GetSafeNormal();   // Normal���� �����´�.
-		G1Player->AddMovementInput(WorldDirection, 1.0, false);
-	}
+
+	FVector StartLocation = G1Player->GetActorLocation();
+	FRotator Rotation = (CachedDestination - StartLocation).Rotation();
+
+	// 캐릭터가 이 방향을 바라보도록 회전시킴
+	G1Player->SetActorRotation(Rotation);  // 캐릭터의 회전값을 설정
+
+
+
+	// 공격 애니메이션 실행
+
+
+	// -----------------------------------------------------
+	// 실험
+
+	// 범위 안에 들어오면 피달게하기 허공때려도
+	G1Player->ActivateAbility(G1GameplayTags::Ability_Attack);
+	SetCreatureState(ECreatureState::Skill);
+	TargetActor = HighlightActor;
+
 }
 
-void AG1PlayerController::OnInputStarted()
+
+
+void AG1PlayerController::OnMoveStarted()
 {
 	StopMovement();
-	bMousePressed = true;
+	SetCreatureState(ECreatureState::Moving); // 이동 상태로 설정
 	TargetActor = HighlightActor;
 }
 
 // Triggered every frame when the input is held down
-void AG1PlayerController::OnSetDestinationTriggered()
+void AG1PlayerController::OnMoveTriggered()
 {
 	if (GetCreatureState() == ECreatureState::Skill)
 	{
@@ -220,17 +254,20 @@ void AG1PlayerController::OnSetDestinationTriggered()
 		FVector WorldDirection = (CachedDestination - G1Player->GetActorLocation()).GetSafeNormal();
 		G1Player->AddMovementInput(WorldDirection, 1.0, false);
 	}
+
+
 }
 
 
-void AG1PlayerController::OnSetDestinationReleased()
+void AG1PlayerController::OnMoveReleased()
 {
-	bMousePressed = false;
 
 	if (GetCreatureState() == ECreatureState::Skill)
 	{
 		return;
 	}
+	
+	SetCreatureState(ECreatureState::None);
 
 	// If it was a short press
 	if (FollowTime <= ShortPressThreshold)
@@ -243,8 +280,29 @@ void AG1PlayerController::OnSetDestinationReleased()
 		}
 
 	}
-
 	FollowTime = 0.f;
+
+
+}
+
+void AG1PlayerController::OnAttackStarted()       //공격 부분
+{
+	bMousePressed = true;
+	TargetActor = HighlightActor;
+
+}
+
+void AG1PlayerController::OnAttackTriggered()        //공격 부분
+{
+	ChaseTargetAndAttack();
+}
+
+void AG1PlayerController::OnAttackReleased()        //공격 부분
+{
+	bMousePressed = false;
+
+	
+
 }
 
 ECreatureState AG1PlayerController::GetCreatureState()

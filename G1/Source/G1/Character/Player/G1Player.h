@@ -35,6 +35,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UCameraComponent> Camera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class USceneComponent> AttackScope;
+
+
 protected:
 	// TEMP
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

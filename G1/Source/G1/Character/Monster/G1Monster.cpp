@@ -32,3 +32,8 @@ void AG1Monster::InitAbilitySystem()
 
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
+
+void AG1Monster::OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker)
+{
+	Super::OnDamaged(Damage,Attacker);
+}
