@@ -80,6 +80,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<class AG1Player> G1Player;
 
+	UPROPERTY(BlueprintReadOnly)
+	TArray<AActor*> ActorsToIgnore;
 
 	float AttackRange = 500.f;
 

@@ -46,6 +46,6 @@ protected:
 
 public:
 
-	void ActivateAbility(FGameplayTag AbilityTag);
+	virtual void ActivateAbility(FGameplayTag AbilityTag);
 	
 };

@@ -93,12 +93,12 @@ void AG1PlayerController::HandleGameplayEvent(FGameplayTag EventTag)
 		// 라인 트레이스 수행
 		TArray<FHitResult> HitResults; // 여러 개의 트레이스 결과를 저장할 배열
 
-		TArray<AActor*> ActorsToIgnore;
+		ActorsToIgnore;
 		ActorsToIgnore.Add(G1Player); // G1Player를 무시 목록에 추가
 
 		if (UKismetSystemLibrary::SphereTraceMulti(GetWorld(), StartLocation, EndLocation, 50.0f, UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true))
 		{
-			for (FHitResult HitResult : HitResults)
+			for (const FHitResult HitResult : HitResults)
 			{
 				AActor* HitActor = HitResult.GetActor();
 
@@ -107,9 +107,6 @@ void AG1PlayerController::HandleGameplayEvent(FGameplayTag EventTag)
 					AG1Monster* Monster = Cast<AG1Monster>(HitActor); // AG1Monster 타입으로 캐스팅
 					if (Monster) // 캐스팅 성공 확인
 					{
-						// HitActor가 몬스터 타입인지 확인 (예시: AMonster 클래스)
-						if (HitActor->IsA(AG1Monster::StaticClass()))
-						{
 							// 플레이어와 타격 대상 사이의 거리 계산
 							float Distance = FVector::Dist(G1Player->GetActorLocation(), HitActor->GetActorLocation());
 
@@ -119,7 +116,6 @@ void AG1PlayerController::HandleGameplayEvent(FGameplayTag EventTag)
 								// OnDamaged 함수 호출
 								Monster->OnDamaged(10, G1Player);
 							}
-						}
 					}
 				}
 			}
@@ -140,7 +136,7 @@ void AG1PlayerController::TickCursorTrace()
 		return;
 	}
 
-	AG1Character* LocalHighlightActor = Cast<AG1Character>(OutCursorHit.GetActor());
+	AG1Monster* LocalHighlightActor = Cast<AG1Monster>(OutCursorHit.GetActor());
 	if (LocalHighlightActor == nullptr)
 	{
 		// 있었는데 없어지는 상황
@@ -197,15 +193,6 @@ void AG1PlayerController::ChaseTargetAndAttack()
 	// 캐릭터가 이 방향을 바라보도록 회전시킴
 	G1Player->SetActorRotation(Rotation);  // 캐릭터의 회전값을 설정
 
-
-
-	// 공격 애니메이션 실행
-
-
-	// -----------------------------------------------------
-	// 실험
-
-	// 범위 안에 들어오면 피달게하기 허공때려도
 	G1Player->ActivateAbility(G1GameplayTags::Ability_Attack);
 	SetCreatureState(ECreatureState::Skill);
 	TargetActor = HighlightActor;
