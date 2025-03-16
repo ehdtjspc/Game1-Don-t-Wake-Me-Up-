@@ -2,6 +2,7 @@
 
 
 #include "AbilitySystem/G1AbilitySystemComponent.h"
+#include "G1GameplayTags.h"
 
 void UG1AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& StartupAbilities)
 {
@@ -9,20 +10,37 @@ void UG1AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<c
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
 		FGameplayAbilitySpecHandle SpecHandle = GiveAbility(AbilitySpec);
-
+		
 		auto& a = ActivatableAbilities;
 
 		//TryActivateAbility(SpecHandle);
 		//GiveAbilityAndActivateOnce(AbilitySpec);
 		SpecHandles.Add(SpecHandle);
 	}
+
+	
 }
 
 void UG1AbilitySystemComponent::ActivateAbility(FGameplayTag AbilityTag)
 {
+	FGameplayAbilitySpecHandle& Attack = SpecHandles[0];
+	FGameplayAbilitySpecHandle& Dash = SpecHandles[1];
+
 	for (FGameplayAbilitySpecHandle& SpecHandle : SpecHandles)
 	{
+		if (AbilityTag == G1GameplayTags::Ability_Attack)
+		{
+			TryActivateAbility(Attack);
+		}
 		// TODO
-		TryActivateAbility(SpecHandle);
+		
+		if (AbilityTag == G1GameplayTags::Ability_Dash)
+		{
+			TryActivateAbility(Dash);
+		}
+		
 	}
 }
+
+
+

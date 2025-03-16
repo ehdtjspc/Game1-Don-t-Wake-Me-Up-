@@ -44,6 +44,7 @@ private:
 	void OnAttackTriggered();
 	void OnAttackReleased();
 
+	void Input_Dash();
 
 	ECreatureState GetCreatureState();
 	void SetCreatureState(ECreatureState InState);
@@ -74,8 +75,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<class AG1Character> HighlightActor;
 
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<class UAnimMontage> AttackMontage;
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<class AG1Player> G1Player;
@@ -85,6 +84,14 @@ protected:
 
 	float AttackRange = 500.f;
 
+
+
+protected:
+	FTimerHandle DashCooldownTimerHandle;  // 대쉬 쿨타임 타이머 핸들
+
+	void ResetDashCooldown();  // 쿨타임 끝나면 호출되는 함수
+
+	bool bCanDash = true;
 
 
 	

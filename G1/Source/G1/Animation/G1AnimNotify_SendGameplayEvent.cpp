@@ -18,6 +18,7 @@ void UG1AnimNotify_SendGameplayEvent::Notify(USkeletalMeshComponent* MeshComp, U
 	if (LocalCharacter)
 	{
 		LocalCharacter->HandleGameplayEvent(EventTag);
+
 	}
 
 }

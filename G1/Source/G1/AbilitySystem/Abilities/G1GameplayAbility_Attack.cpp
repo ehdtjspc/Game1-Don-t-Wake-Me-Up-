@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/Abilities/G1GameplayAbility_Attack.h"
 #include "Character/Player/G1Player.h"
+#include "G1GameplayTags.h"
+#include "AbilitySystem/G1AbilitySystemComponent.h"
 
 UG1GameplayAbility_Attack::UG1GameplayAbility_Attack(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -14,7 +16,7 @@ bool UG1GameplayAbility_Attack::CanActivateAbility(const FGameplayAbilitySpecHan
 {
 	if (Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags) == false)
 	{
-		return false;
+			return false;
 	}
 
 	return true;

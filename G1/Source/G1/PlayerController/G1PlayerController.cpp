@@ -14,6 +14,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Character/Monster/G1Monster.h"
+#include "AbilitySystem/G1AbilitySystemComponent.h"
 
 
 
@@ -52,6 +53,8 @@ void AG1PlayerController::SetupInputComponent()
 
 		auto ActionMove = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_SetDestination);
 		auto ActionAttack = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_BasicAttack);
+		auto ActionBasicDash = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_BasicDash);
+
 
 		// Setup mouse input events
 		EnhancedInputComponent->BindAction(ActionMove, ETriggerEvent::Started, this, &ThisClass::OnMoveStarted);
@@ -63,6 +66,8 @@ void AG1PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(ActionAttack, ETriggerEvent::Triggered, this, &ThisClass::OnAttackTriggered);
 		EnhancedInputComponent->BindAction(ActionAttack, ETriggerEvent::Completed, this, &ThisClass::OnAttackReleased);
 		EnhancedInputComponent->BindAction(ActionAttack, ETriggerEvent::Canceled, this, &ThisClass::OnAttackReleased);
+
+		EnhancedInputComponent->BindAction(ActionBasicDash, ETriggerEvent::Triggered, this, &ThisClass::Input_Dash);
 
 
 	}
@@ -292,6 +297,22 @@ void AG1PlayerController::OnAttackReleased()        //공격 부분
 
 }
 
+void AG1PlayerController::Input_Dash()
+{
+	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Cyan, TEXT("Dash"));
+
+	if (bCanDash == true)
+	{
+		G1Player->ActivateAbility(G1GameplayTags::Ability_Dash);
+		bCanDash = false;
+
+		GetWorld()->GetTimerManager().SetTimer(DashCooldownTimerHandle, this, &AG1PlayerController::ResetDashCooldown, 5.0f, false);
+
+	}
+	StopMovement();
+
+}
+
 ECreatureState AG1PlayerController::GetCreatureState()
 {
 	if (G1Player)
@@ -308,5 +329,10 @@ void AG1PlayerController::SetCreatureState(ECreatureState InState)
 	{
 		G1Player->CreatureState = InState;
 	}
+}
+
+void AG1PlayerController::ResetDashCooldown()
+{
+	bCanDash = true;
 }
 

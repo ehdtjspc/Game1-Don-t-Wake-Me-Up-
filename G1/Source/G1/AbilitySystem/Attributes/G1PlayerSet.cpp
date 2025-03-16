@@ -3,3 +3,7 @@
 
 #include "AbilitySystem/Attributes/G1PlayerSet.h"
 
+UG1PlayerSet::UG1PlayerSet()
+{
+	InitDashCooldown(5.0f);
+}

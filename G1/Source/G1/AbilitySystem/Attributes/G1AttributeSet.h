@@ -30,6 +30,7 @@ public:
 	ATTRIBUTE_ACCESSORS(ThisClass, MaxMana);
 	ATTRIBUTE_ACCESSORS(ThisClass, BaseDamage);
 	ATTRIBUTE_ACCESSORS(ThisClass, BaseDefense);
+	ATTRIBUTE_ACCESSORS(ThisClass, DashCooldown);
 
 private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))// private 일때 meta = (AllowPrivateAccess = "true") 이걸 사용 하면 블루프린트에서 에러가 안난다.
@@ -49,5 +50,11 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData BaseDefense;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	FGameplayAttributeData DashCooldown;
+
 };
 
+
+//공용 코드 넣어주기 몬스터와 플레이어

@@ -72,4 +72,5 @@ public:
 	UPROPERTY(EditAnywhere,Category=Abilities)
 	TArray<TSubclassOf<class UGameplayAbility>> StartupAbilities;
 
+
 };
