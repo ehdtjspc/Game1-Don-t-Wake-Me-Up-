@@ -25,6 +25,7 @@ void UG1AbilitySystemComponent::ActivateAbility(FGameplayTag AbilityTag)
 {
 	FGameplayAbilitySpecHandle& Attack = SpecHandles[0];
 	FGameplayAbilitySpecHandle& Dash = SpecHandles[1];
+	FGameplayAbilitySpecHandle& DontBotherMe = SpecHandles[2];
 
 	for (FGameplayAbilitySpecHandle& SpecHandle : SpecHandles)
 	{
@@ -37,6 +38,11 @@ void UG1AbilitySystemComponent::ActivateAbility(FGameplayTag AbilityTag)
 		if (AbilityTag == G1GameplayTags::Ability_Dash)
 		{
 			TryActivateAbility(Dash);
+		}
+
+		if (AbilityTag == G1GameplayTags::Ability_DontBotherMe)
+		{
+			TryActivateAbility(DontBotherMe);
 		}
 		
 	}

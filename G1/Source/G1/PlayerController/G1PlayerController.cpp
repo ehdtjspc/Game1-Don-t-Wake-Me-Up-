@@ -54,6 +54,7 @@ void AG1PlayerController::SetupInputComponent()
 		auto ActionMove = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_SetDestination);
 		auto ActionAttack = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_BasicAttack);
 		auto ActionBasicDash = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_BasicDash);
+		auto DontBotherMe = InputData->FindInputActionByTag(G1GameplayTags::Input_Action_DontBotherMe);
 
 
 		// Setup mouse input events
@@ -68,6 +69,7 @@ void AG1PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(ActionAttack, ETriggerEvent::Canceled, this, &ThisClass::OnAttackReleased);
 
 		EnhancedInputComponent->BindAction(ActionBasicDash, ETriggerEvent::Triggered, this, &ThisClass::Input_Dash);
+		EnhancedInputComponent->BindAction(DontBotherMe, ETriggerEvent::Triggered, this, &ThisClass::Input_DontBotherMe);
 
 
 	}
@@ -313,6 +315,23 @@ void AG1PlayerController::Input_Dash()
 
 }
 
+void AG1PlayerController::Input_DontBotherMe()
+{
+	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Cyan, TEXT("Q"));
+
+	if (bCanDontBotherMe == true)
+	{
+		G1Player->ActivateAbility(G1GameplayTags::Ability_DontBotherMe);
+		bCanDontBotherMe = false;
+
+		GetWorld()->GetTimerManager().SetTimer(DontBotherMeCooldownTimerHandle, this, &AG1PlayerController::ResetDontBotherMeCooldown, 5.0f, false);
+
+	}
+	StopMovement();
+
+
+}
+
 ECreatureState AG1PlayerController::GetCreatureState()
 {
 	if (G1Player)
@@ -335,4 +354,11 @@ void AG1PlayerController::ResetDashCooldown()
 {
 	bCanDash = true;
 }
+
+void AG1PlayerController::ResetDontBotherMeCooldown()
+{
+	bCanDontBotherMe = true;
+}
+
+
 

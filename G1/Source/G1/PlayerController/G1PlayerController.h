@@ -45,6 +45,7 @@ private:
 	void OnAttackReleased();
 
 	void Input_Dash();
+	void Input_DontBotherMe();
 
 	ECreatureState GetCreatureState();
 	void SetCreatureState(ECreatureState InState);
@@ -88,10 +89,13 @@ protected:
 
 protected:
 	FTimerHandle DashCooldownTimerHandle;  // 대쉬 쿨타임 타이머 핸들
-
+	FTimerHandle DontBotherMeCooldownTimerHandle;
 	void ResetDashCooldown();  // 쿨타임 끝나면 호출되는 함수
+	void ResetDontBotherMeCooldown();
 
 	bool bCanDash = true;
+	bool bCanDontBotherMe = true;
+
 
 
 	

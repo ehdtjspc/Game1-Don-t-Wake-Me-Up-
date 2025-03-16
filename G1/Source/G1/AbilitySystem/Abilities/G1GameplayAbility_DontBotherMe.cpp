@@ -1,0 +1,40 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "AbilitySystem/Abilities/G1GameplayAbility_DontBotherMe.h"
+#include "Character/Player/G1Player.h"
+#include "G1GameplayTags.h"
+#include "G1GameplayAbility_DontBotherMe.h"
+
+UG1GameplayAbility_DontBotherMe::UG1GameplayAbility_DontBotherMe(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
+
+{
+}
+
+bool UG1GameplayAbility_DontBotherMe::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	if (Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags) == false)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void UG1GameplayAbility_DontBotherMe::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
+{
+	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+	// Do Something
+	if (AttackMontage)
+	{
+		AG1Player* Player = Cast<AG1Player>(ActorInfo->AvatarActor);
+		Player->PlayAnimMontage(AttackMontage);
+	}
+}
+
+void UG1GameplayAbility_DontBotherMe::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+{
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
