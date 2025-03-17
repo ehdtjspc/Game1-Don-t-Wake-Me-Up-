@@ -29,8 +29,8 @@ protected:
 
 public:
 	virtual void HandleGameplayEvent(FGameplayTag EventTag);
-
-
+	void TargetAttack();
+	void TargetDontBotherMeSkill();
 private:
 	void TickCursorTrace();
 	void ChaseTargetAndAttack();
@@ -85,7 +85,9 @@ protected:
 
 	float AttackRange = 500.f;
 
-
+	// 이펙트 설정 블루프린트로
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	UNiagaraSystem* NiagaraEffect; // NiagaraEffect 변수 선언
 
 protected:
 	FTimerHandle DashCooldownTimerHandle;  // 대쉬 쿨타임 타이머 핸들
@@ -95,6 +97,7 @@ protected:
 
 	bool bCanDash = true;
 	bool bCanDontBotherMe = true;
+	bool bCanDamaged = true;
 
 
 

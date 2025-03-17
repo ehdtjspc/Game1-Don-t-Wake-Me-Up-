@@ -9,7 +9,9 @@
 #include "Data/G1InputData.h"
 #include "G1GameplayTags.h"
 #include "Character/Player/G1Player.h"
+#include "Character/Monster/G1Monster.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "NiagaraComponent.h"
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -93,41 +95,124 @@ void AG1PlayerController::HandleGameplayEvent(FGameplayTag EventTag)
 {
 	if (EventTag.MatchesTag(G1GameplayTags::Event_Montage_Attack))
 	{
-		// 라인 트레이스 시작 위치 및 방향 설정
-		FVector StartLocation = G1Player->GetActorLocation();
-		FVector ForwardVector = G1Player->GetActorForwardVector();
-		FVector EndLocation = StartLocation + ForwardVector * 150.0f; // 캐릭터 전방 150 위치
-		// 라인 트레이스 수행
-		TArray<FHitResult> HitResults; // 여러 개의 트레이스 결과를 저장할 배열
+		TargetAttack();
+	}
 
-		ActorsToIgnore;
-		ActorsToIgnore.Add(G1Player); // G1Player를 무시 목록에 추가
+	if (EventTag.MatchesTag(G1GameplayTags::Event_Montage_DontBotherMe))
+	{
+		TargetDontBotherMeSkill();
+	}
 
-		if (UKismetSystemLibrary::SphereTraceMulti(GetWorld(), StartLocation, EndLocation, 50.0f, UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true))
+}
+
+void AG1PlayerController::TargetAttack()
+{
+	// 라인 트레이스 시작 위치 및 방향 설정
+	FVector StartLocation = G1Player->GetActorLocation();
+	FVector ForwardVector = G1Player->GetActorForwardVector();
+	FVector EndLocation = StartLocation + ForwardVector * 150.0f; // 캐릭터 전방 150 위치
+	// 라인 트레이스 수행
+	TArray<FHitResult> HitResults; // 여러 개의 트레이스 결과를 저장할 배열
+
+	ActorsToIgnore;
+	ActorsToIgnore.Add(G1Player); // G1Player를 무시 목록에 추가
+
+	if (UKismetSystemLibrary::SphereTraceMulti(GetWorld(), StartLocation, EndLocation, 50.0f, UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true))
+	{
+		for (const FHitResult HitResult : HitResults)
 		{
-			for (const FHitResult HitResult : HitResults)
+			AActor* HitActor = HitResult.GetActor();
+
+			if (HitActor) // HitActor 유효성 확인
+			{
+				AG1Monster* Monster = Cast<AG1Monster>(HitActor); // AG1Monster 타입으로 캐스팅
+				if (Monster) // 캐스팅 성공 확인
+				{
+					// 플레이어와 타격 대상 사이의 거리 계산
+					float Distance = FVector::Dist(G1Player->GetActorLocation(), HitActor->GetActorLocation());
+
+					// 거리가 150 이하일 경우에만 OnDamaged 호출
+					if (Distance <= 160.0f)
+					{
+						// OnDamaged 함수 호출
+						Monster->OnDamaged(10, G1Player);
+					}
+				}
+			}
+		}
+	}
+}
+
+void AG1PlayerController::TargetDontBotherMeSkill()
+{
+	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Cyan, TEXT("번개!!"));
+
+	AG1PlayerController* PC = Cast<AG1PlayerController>(G1Player->GetController());
+
+	FHitResult hitResult;
+	PC->GetHitResultUnderCursor(ECollisionChannel::ECC_GameTraceChannel1, false, hitResult);
+
+	UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+		GetWorld(),
+		NiagaraEffect,
+		hitResult.Location, // 마우스가 가리키는 좌표
+		FRotator::ZeroRotator
+	);
+	
+	if (NiagaraComp)
+	{
+		FVector NewScale(1, 1, 5);
+		NiagaraComp->SetWorldScale3D(NewScale);
+
+		FTimerHandle TimerHandle;
+
+		GetWorldTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([NiagaraComp]() {
+			if (NiagaraComp)
+			{
+				NiagaraComp->Deactivate(); // 비활성화
+				NiagaraComp->DestroyComponent(); // 제거
+			}
+			}), 0.5f, false); // 3초 후에 한 번만 호출
+	}
+	//람다함수
+
+
+	TArray<AActor*> AlreadyDamagedMonsters;  // 이미 탐지한애 또 데미지 안넣기위한 애
+
+	// 원 범위 내 객체 탐지 후 오버랩 체크해서 공격부분
+	const float Radius = 200.0f;  // 범위 반지름
+	const FVector SkillCenter = hitResult.Location;  // 마우스 위치 (스킬 위치)
+
+	TArray<FHitResult> HitResults; // 여러 개의 트레이스 결과를 저장할 배열
+	UWorld* world = GetWorld();
+	
+	bCanDamaged = false;
+
+	if (!bCanDamaged) // 첫 번째 감지일 때만 실행
+	{
+		if (UKismetSystemLibrary::SphereTraceMulti(GetWorld(), SkillCenter, SkillCenter, Radius, UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true))
+		{
+			for (const FHitResult& HitResult : HitResults)
 			{
 				AActor* HitActor = HitResult.GetActor();
 
 				if (HitActor) // HitActor 유효성 확인
 				{
 					AG1Monster* Monster = Cast<AG1Monster>(HitActor); // AG1Monster 타입으로 캐스팅
-					if (Monster) // 캐스팅 성공 확인
-					{
-							// 플레이어와 타격 대상 사이의 거리 계산
-							float Distance = FVector::Dist(G1Player->GetActorLocation(), HitActor->GetActorLocation());
 
-							// 거리가 150 이하일 경우에만 OnDamaged 호출
-							if (Distance <= 160.0f)
-							{
-								// OnDamaged 함수 호출
-								Monster->OnDamaged(10, G1Player);
-							}
+					if (Monster && !AlreadyDamagedMonsters.Contains(Monster)) // 이미 데미지를 주지 않은 몬스터만 처리
+					{
+						Monster->OnDamaged(10, G1Player); // 데미지 주기
+						AlreadyDamagedMonsters.Add(Monster); // 이미 데미지를 준 몬스터로 표시
 					}
 				}
 			}
 		}
 	}
+
+	bCanDamaged = true; // 한 번만 데미지 주도록 설정
+
+
 }
 
 void AG1PlayerController::TickCursorTrace()
