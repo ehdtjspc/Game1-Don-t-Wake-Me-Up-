@@ -11,6 +11,10 @@ namespace G1GameplayTags
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Action_BasicDash);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Action_DontBotherMe);
 
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(SpawnLocation_All);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Monster_Mother);
+
+
 
 
 	

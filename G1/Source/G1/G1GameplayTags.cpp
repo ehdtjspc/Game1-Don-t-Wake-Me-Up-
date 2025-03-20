@@ -10,6 +10,10 @@ namespace G1GameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Input_Action_BasicDash, "Input.Action.BasicDash");
 	UE_DEFINE_GAMEPLAY_TAG(Input_Action_DontBotherMe, "Input.Action.DontBotherMe");
 
+	UE_DEFINE_GAMEPLAY_TAG(SpawnLocation_All, "SpawnLocation.All");
+	UE_DEFINE_GAMEPLAY_TAG(Monster_Mother, "Monster.Mother");
+
+
 
 
 	UE_DEFINE_GAMEPLAY_TAG(Event_Montage_Begin, "Event.Montage.Begin");
