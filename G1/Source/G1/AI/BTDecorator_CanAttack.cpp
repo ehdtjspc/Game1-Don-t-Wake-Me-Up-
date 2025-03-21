@@ -5,6 +5,8 @@
 #include "G1AIController.h"
 #include "Character/G1Character.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Character/Player/G1Player.h"
+
 UBTDecorator_CanAttack::UBTDecorator_CanAttack()
 {
 	NodeName = TEXT("CanAttack");
@@ -20,7 +22,7 @@ bool UBTDecorator_CanAttack::CalculateRawConditionValue(UBehaviorTreeComponent& 
 		return false;
 	}
 
-	AG1Character* Target = Cast<AG1Character>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(TargetKey.SelectedKeyName));
+	AG1Player* Target = Cast<AG1Player>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(TargetKey.SelectedKeyName));
 
 	if (Target == nullptr)
 	{

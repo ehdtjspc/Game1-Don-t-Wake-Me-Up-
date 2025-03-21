@@ -37,7 +37,10 @@ public:
 	TSubclassOf<class AG1Monster> MonsterClass;
 
 
-	
+	UPROPERTY()
+	FTimerHandle SpawnTimerHandle;
 
+	UPROPERTY()
+	TArray<FVector> SpawnLocations;
 
 };

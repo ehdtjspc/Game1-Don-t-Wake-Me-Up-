@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -17,16 +17,11 @@ class G1_API AG1GameModeBase : public AGameModeBase
 public:
 	AG1GameModeBase();
 	
-	void GetASpawnManager();
-
-	void SpawnMonster();
-
 
 protected:
 	virtual void BeginPlay() override;
 	
 private:
 
-   UPROPERTY(EditAnywhere, Category = "Spawn")
-   TObjectPtr<class ASpawnManager> SpawnManager;
+
 };

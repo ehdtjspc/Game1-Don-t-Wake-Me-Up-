@@ -6,6 +6,9 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "AI/G1AIController.h"
 #include "NavigationSystem.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameMode/G1GameModeBase.h"
+
 
 UBTTaskNode_FindPatrolPos::UBTTaskNode_FindPatrolPos()
 {
@@ -29,6 +32,7 @@ EBTNodeResult::Type UBTTaskNode_FindPatrolPos::ExecuteTask(UBehaviorTreeComponen
 	}
 
 	FNavLocation OutPatrolPos;
+
 
 	if (NavSystem->GetRandomPointInNavigableRadius(ControllingPawn->GetActorLocation(), SearchRadius, OUT OutPatrolPos))
 	{

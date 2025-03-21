@@ -45,4 +45,6 @@ public:
 	TArray<class ASpawnLocation*> SpawnLocations;
  
 
+
+
 };

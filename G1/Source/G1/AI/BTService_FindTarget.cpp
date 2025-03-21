@@ -6,6 +6,7 @@
 #include "Character/G1Character.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Engine/OverlapResult.h"
+#include "Character/Player/G1Player.h"
 
 UBTService_FindTarget::UBTService_FindTarget()
 {
@@ -46,10 +47,10 @@ void UBTService_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 	{
 		for (FOverlapResult& OverlapResult : OverlapResults)
 		{
-			AG1Character* G1Character = Cast<AG1Character>(OverlapResult.GetActor());
-			if (G1Character)
+			AG1Player* G1Player = Cast<AG1Player>(OverlapResult.GetActor());
+			if (G1Player)
 			{
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject(TargetKey.SelectedKeyName, G1Character);
+				OwnerComp.GetBlackboardComponent()->SetValueAsObject(TargetKey.SelectedKeyName, G1Player);
 				DrawDebugSphere(World, Location, SearchRadius, 16, FColor::Green, false, 0.2f);
 				return;
 			}
