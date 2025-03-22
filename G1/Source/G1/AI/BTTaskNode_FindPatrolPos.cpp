@@ -8,6 +8,7 @@
 #include "NavigationSystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameMode/G1GameModeBase.h"
+#include "Object/G1Object_Shield.h"
 
 
 UBTTaskNode_FindPatrolPos::UBTTaskNode_FindPatrolPos()
@@ -33,12 +34,19 @@ EBTNodeResult::Type UBTTaskNode_FindPatrolPos::ExecuteTask(UBehaviorTreeComponen
 
 	FNavLocation OutPatrolPos;
 
-
-	if (NavSystem->GetRandomPointInNavigableRadius(ControllingPawn->GetActorLocation(), SearchRadius, OUT OutPatrolPos))
+	if (AActor* FoundShield = UGameplayStatics::GetActorOfClass(GetWorld(), AG1Object_Shield::StaticClass()))
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsVector(PatrolPosKey.SelectedKeyName, OutPatrolPos);
+		FVector ShieldLocatuon = FoundShield->GetActorLocation();
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(PatrolPosKey.SelectedKeyName, ShieldLocatuon);
 		return EBTNodeResult::Succeeded;
+
 	}
+
+	//if (NavSystem->GetRandomPointInNavigableRadius(ControllingPawn->GetActorLocation(), SearchRadius, OUT OutPatrolPos))
+	//{
+	//	OwnerComp.GetBlackboardComponent()->SetValueAsVector(PatrolPosKey.SelectedKeyName, OutPatrolPos);
+	//	return EBTNodeResult::Succeeded;
+	//}
 
 	return EBTNodeResult::Failed;
 }
