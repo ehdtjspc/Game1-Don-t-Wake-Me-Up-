@@ -4,25 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTDecorator.h"
-#include "BTDecorator_CanAttack.generated.h"
+#include "BTDecorator_CanAttackShield.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class G1_API UBTDecorator_CanAttack : public UBTDecorator
+class G1_API UBTDecorator_CanAttackShield : public UBTDecorator
 {
 	GENERATED_BODY()
 
 public:
-	UBTDecorator_CanAttack();
+	UBTDecorator_CanAttackShield();
 
 protected:
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
 
 protected:
-	UPROPERTY(EditAnywhere, Category = Blackboard)
-	FBlackboardKeySelector TargetKey1;
-	
 
+	UPROPERTY(EditAnywhere, Category = Blackboard)
+	FBlackboardKeySelector TargetKey2;
+	
 };

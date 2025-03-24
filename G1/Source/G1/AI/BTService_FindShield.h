@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTService.h"
-#include "BTService_FindTarget.generated.h"
+#include "BTService_FindShield.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class G1_API UBTService_FindTarget : public UBTService
+class G1_API UBTService_FindShield : public UBTService
 {
 	GENERATED_BODY()
-
+	
 public:
-	UBTService_FindTarget();
+	UBTService_FindShield();
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
@@ -24,8 +24,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SearchRadius = 500.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FBlackboardKeySelector TargetKey1;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector TargetKey2;
+
 };

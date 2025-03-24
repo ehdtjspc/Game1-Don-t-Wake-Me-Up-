@@ -36,9 +36,34 @@ EBTNodeResult::Type UBTTaskNode_FindPatrolPos::ExecuteTask(UBehaviorTreeComponen
 
 	if (AActor* FoundShield = UGameplayStatics::GetActorOfClass(GetWorld(), AG1Object_Shield::StaticClass()))
 	{
-		FVector ShieldLocatuon = FoundShield->GetActorLocation();
-		OwnerComp.GetBlackboardComponent()->SetValueAsVector(PatrolPosKey.SelectedKeyName, ShieldLocatuon);
+		FVector ShieldLocation = FoundShield->GetActorLocation();
+		FVector ShieldExtent = FoundShield->GetSimpleCollisionCylinderExtent();
+
+		// 몬스터의 현재 위치 가져오기
+		AActor* OwnerActor = OwnerComp.GetAIOwner()->GetPawn();
+		if (!OwnerActor) return EBTNodeResult::Failed;
+
+		FVector MonsterLocation = OwnerActor->GetActorLocation();
+
+		// 몬스터 → 실드 방향 벡터 구하기
+		FVector DirectionToShield = (ShieldLocation - MonsterLocation).GetSafeNormal();
+		
+		// 목표 위치 계산 (실드 반지름 + 50 떨어진 곳)
+		FVector TargetLocation = ShieldLocation - (DirectionToShield * (ShieldExtent.X + 0.01));
+
+		// 목표 위치 설정
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(PatrolPosKey.SelectedKeyName, TargetLocation);
+
 		return EBTNodeResult::Succeeded;
+
+
+		//float DistanceSq = FVector::DistSquared(MonsterLocation, TargetLocation);
+		//if (DistanceSq <= 2500.0f)
+		//{
+
+		//}
+
+		//return EBTNodeResult::InProgress;
 
 	}
 

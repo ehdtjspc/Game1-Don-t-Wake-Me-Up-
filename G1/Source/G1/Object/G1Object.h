@@ -10,7 +10,7 @@
 #include "G1Object.generated.h"
 
 UCLASS()
-class G1_API AG1Object : public AActor
+class G1_API AG1Object : public APawn
 {
 	GENERATED_BODY()
 	

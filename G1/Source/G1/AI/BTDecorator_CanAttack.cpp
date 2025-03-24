@@ -6,6 +6,7 @@
 #include "Character/G1Character.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/Player/G1Player.h"
+#include "Object/G1Object_Shield.h"
 
 UBTDecorator_CanAttack::UBTDecorator_CanAttack()
 {
@@ -22,13 +23,16 @@ bool UBTDecorator_CanAttack::CalculateRawConditionValue(UBehaviorTreeComponent& 
 		return false;
 	}
 
-	AG1Player* Target = Cast<AG1Player>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(TargetKey.SelectedKeyName));
-
-	if (Target == nullptr)
+	AG1Player* Target1 = Cast<AG1Player>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(TargetKey1.SelectedKeyName));
+	
+	if (Target1 == nullptr)
 	{
 		return false;
 	}
 
-	return (Target->GetDistanceTo(ControllingPawn) <= 200);
+	return (Target1->GetDistanceTo(ControllingPawn) <= 200);
+
+
+	
 
 }
