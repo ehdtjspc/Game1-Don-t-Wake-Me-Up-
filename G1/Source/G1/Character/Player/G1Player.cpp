@@ -10,6 +10,7 @@
 #include "AbilitySystem/G1AbilitySystemComponent.h"
 #include "Character/Player/G1PlayerState.h"
 #include "AbilitySystem/Attributes/G1PlayerSet.h"
+#include "G1Define.h"
 
 
 AG1Player::AG1Player()
@@ -83,11 +84,15 @@ void AG1Player::Tick(float DeltaTime)
 void AG1Player::HandleGameplayEvent(FGameplayTag EventTag)
 {
 	AG1PlayerController* PC = Cast<AG1PlayerController>(GetController());
-
-	if (PC)
+	
+	if (CreatureState != ECreatureState::Dead)
 	{
-		PC->HandleGameplayEvent(EventTag);
+		if (PC)
+		{
+			PC->HandleGameplayEvent(EventTag);
+		}
 	}
+
 }
 
 void AG1Player::ActivateAbility(FGameplayTag AbilityTag)

@@ -83,7 +83,12 @@ void AG1Character::OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker)
 
 	if (Hp == 0)
 	{
-		OnDead(Attacker);
+		CreatureState = ECreatureState::Dead;
+
+		if (CreatureState == ECreatureState::Dead)
+		{
+			OnDead(Attacker);
+		}
 	}
 
 	//D(FString::Printf(TEXT("%d"), Hp));
@@ -94,10 +99,8 @@ void AG1Character::OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker)
 
 void AG1Character::OnDead(TObjectPtr<AG1Character> Attacker)
 {
-	if (CreatureState == ECreatureState::Dead)
-	{
-		CreatureState = ECreatureState::Dead;
-	}
+
+	PlayAnimMontage(DieMontage);
 }
 
 void AG1Character::RefreshHpBarRatio()

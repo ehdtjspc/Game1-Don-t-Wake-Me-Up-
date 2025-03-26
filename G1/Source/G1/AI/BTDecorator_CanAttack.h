@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTDecorator.h"
+#include "G1Define.h"
 #include "BTDecorator_CanAttack.generated.h"
 
 /**
@@ -25,4 +26,8 @@ protected:
 	FBlackboardKeySelector TargetKey1;
 	
 
+public:
+
+	UPROPERTY(BlueprintReadWrite)
+	ECreatureState CreatureState;
 };

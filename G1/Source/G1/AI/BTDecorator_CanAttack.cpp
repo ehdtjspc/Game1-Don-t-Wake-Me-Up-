@@ -10,7 +10,7 @@
 
 UBTDecorator_CanAttack::UBTDecorator_CanAttack()
 {
-	NodeName = TEXT("CanAttack");
+
 }
 
 bool UBTDecorator_CanAttack::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
@@ -30,9 +30,6 @@ bool UBTDecorator_CanAttack::CalculateRawConditionValue(UBehaviorTreeComponent& 
 		return false;
 	}
 
-	return (Target1->GetDistanceTo(ControllingPawn) <= 200);
-
-
-	
+	return (Target1->GetDistanceTo(ControllingPawn) <= 200 && CreatureState != ECreatureState::Dead);
 
 }

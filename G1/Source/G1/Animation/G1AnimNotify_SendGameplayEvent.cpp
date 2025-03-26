@@ -7,6 +7,7 @@
 UG1AnimNotify_SendGameplayEvent::UG1AnimNotify_SendGameplayEvent(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
+
 }
 
 void UG1AnimNotify_SendGameplayEvent::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
@@ -15,6 +16,8 @@ void UG1AnimNotify_SendGameplayEvent::Notify(USkeletalMeshComponent* MeshComp, U
 
 	AG1Character* LocalCharacter = Cast<AG1Character>(MeshComp->GetOwner());
 	
+
+
 	if (LocalCharacter)
 	{
 		LocalCharacter->HandleGameplayEvent(EventTag);

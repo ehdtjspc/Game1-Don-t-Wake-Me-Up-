@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/G1Character.h"
+#include "G1Define.h"
 #include "G1Monster.generated.h"
 
 /**
@@ -26,5 +27,13 @@ public:
 
 	virtual void OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker) override;
 
+	void AttackAction();
+
+public:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<UAnimMontage> AttackMontage;
+
+public:
 
 };

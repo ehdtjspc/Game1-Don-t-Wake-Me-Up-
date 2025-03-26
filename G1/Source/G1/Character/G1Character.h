@@ -73,4 +73,9 @@ public:
 	TArray<TSubclassOf<class UGameplayAbility>> StartupAbilities;
 
 
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<UAnimMontage> DieMontage;
+
+
 };

@@ -37,3 +37,8 @@ void AG1Monster::OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker)
 {
 	Super::OnDamaged(Damage,Attacker);
 }
+
+void AG1Monster::AttackAction()
+{
+	PlayAnimMontage(AttackMontage);
+}
