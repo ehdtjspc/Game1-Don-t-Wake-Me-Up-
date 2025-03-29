@@ -34,6 +34,5 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UAnimMontage> AttackMontage;
 
-public:
 
 };

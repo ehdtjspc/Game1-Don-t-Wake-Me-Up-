@@ -16,7 +16,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Character/Monster/G1Monster.h"
-#include "AbilitySystem/G1AbilitySystemComponent.h"
+#include "AbilitySystem/CharactorAbility/CharactorAbilitySystemComponent.h"
 
 
 

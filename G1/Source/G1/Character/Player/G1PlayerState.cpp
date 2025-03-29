@@ -2,13 +2,13 @@
 
 
 #include "Character/Player/G1PlayerState.h"
-#include "AbilitySystem/G1AbilitySystemComponent.h"
-#include "AbilitySystem/Attributes/G1PlayerSet.h"
+#include "AbilitySystem/CharactorAbility/CharactorAbilitySystemComponent.h"
+#include "AbilitySystem/CharactorAbility/CharactorAttributes/PlayerSet/G1PlayerSet.h"
 
 AG1PlayerState::AG1PlayerState(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	AbilitySystemComponent = CreateDefaultSubobject<UG1AbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent = CreateDefaultSubobject<UCharactorAbilitySystemComponent>("AbilitySystemComponent");
 	PlayerSet = CreateDefaultSubobject<UG1PlayerSet>("PlayerSet");
 
 }

@@ -7,9 +7,9 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "PlayerController/G1PlayerController.h"
-#include "AbilitySystem/G1AbilitySystemComponent.h"
+#include "AbilitySystem/CharactorAbility/CharactorAbilitySystemComponent.h"
 #include "Character/Player/G1PlayerState.h"
-#include "AbilitySystem/Attributes/G1PlayerSet.h"
+#include "AbilitySystem/CharactorAbility/CharactorAttributes/PlayerSet/G1PlayerSet.h"
 #include "G1Define.h"
 
 
@@ -69,7 +69,7 @@ void AG1Player::InitAbilitySystem()
 
 	if (AG1PlayerState* PS = GetPlayerState<AG1PlayerState>())
 	{
-		AbilitySystemComponent = Cast<UG1AbilitySystemComponent>(PS->GetAbilitySystemComponent());
+		AbilitySystemComponent = Cast<UCharactorAbilitySystemComponent>(PS->GetAbilitySystemComponent());
 		AbilitySystemComponent->InitAbilityActorInfo(PS, this);
 
 		AttributeSet = PS->GetG1PlayerSet();

@@ -9,7 +9,7 @@
 
 class UG1PlayerSet;
 
-class UG1AbilitySystemComponent;
+class UCharactorAbilitySystemComponent;
 /**
  * 
  */
@@ -30,7 +30,7 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
-	TObjectPtr<UG1AbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<UCharactorAbilitySystemComponent> AbilitySystemComponent;
 	
 	UPROPERTY()
 	TObjectPtr<UG1PlayerSet> PlayerSet;

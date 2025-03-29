@@ -60,8 +60,8 @@ public:
 	TObjectPtr<class UWidgetComponent> HpBarComponent;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class UG1AbilitySystemComponent> AbilitySystemComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UCharactorAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UG1AttributeSet> AttributeSet;

@@ -55,8 +55,8 @@ void ASpawnManager::SpawnMonster()
 	FVector RandomSpawnLocation = SpawnLocations[RandomIndex];
 	FRotator SpawnRotation = FRotator::ZeroRotator; // 기본 회전 값
 
-	AActor* SpawnedMonster = GetWorld()->SpawnActor<AActor>(MonsterClass, RandomSpawnLocation, SpawnRotation);
-
+	AG1Monster* SpawnedMonster = GetWorld()->SpawnActor<AG1Monster>(MonsterClass, RandomSpawnLocation, SpawnRotation);
+	
 }
 
 

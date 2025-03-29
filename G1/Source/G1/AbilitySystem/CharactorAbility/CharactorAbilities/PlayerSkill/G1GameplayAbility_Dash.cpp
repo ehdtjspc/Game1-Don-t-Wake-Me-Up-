@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AbilitySystem/Abilities/G1GameplayAbility_Dash.h"
+#include "AbilitySystem/CharactorAbility/CharactorAbilities/PlayerSkill/G1GameplayAbility_Dash.h"
 #include "Character/Player/G1Player.h"
 #include "G1GameplayTags.h"
-#include "AbilitySystem/G1AbilitySystemComponent.h"
+#include "AbilitySystem/CharactorAbility/CharactorAbilitySystemComponent.h"
 #include "Character/Player/G1PlayerState.h"
 
 

@@ -1,10 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AbilitySystem/Abilities/G1GameplayAbility_DontBotherMe.h"
+#include "AbilitySystem/CharactorAbility/CharactorAbilities/PlayerSkill/G1GameplayAbility_DontBotherMe.h"
 #include "Character/Player/G1Player.h"
 #include "G1GameplayTags.h"
-#include "G1GameplayAbility_DontBotherMe.h"
 
 UG1GameplayAbility_DontBotherMe::UG1GameplayAbility_DontBotherMe(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
-#include "G1AbilitySystemComponent.generated.h"
+#include "CharactorAbilitySystemComponent.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class G1_API UG1AbilitySystemComponent : public UAbilitySystemComponent
+class G1_API UCharactorAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
 	
@@ -29,8 +29,7 @@ public:
 	TMap<FGameplayTag, FGameplayAbilitySpecHandle> AbilitySpecMap;
 
 	UPROPERTY()
-	UG1AbilitySystemComponent* AbilitySysytemComponent;
-
+	UCharactorAbilitySystemComponent* AbilitySysytemComponent;
 
 
 };

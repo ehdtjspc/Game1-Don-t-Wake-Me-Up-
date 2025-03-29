@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AbilitySystem/G1AbilitySystemComponent.h"
+#include "AbilitySystem/CharactorAbility/CharactorAbilitySystemComponent.h"
 #include "G1GameplayTags.h"
 
-void UG1AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& StartupAbilities)
+void UCharactorAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& StartupAbilities)
 {
 	for (auto& AbilityClass : StartupAbilities)
 	{
@@ -21,7 +21,7 @@ void UG1AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<c
 	
 }
 
-void UG1AbilitySystemComponent::ActivateAbility(FGameplayTag AbilityTag)
+void UCharactorAbilitySystemComponent::ActivateAbility(FGameplayTag AbilityTag)
 {
 	FGameplayAbilitySpecHandle& Attack = SpecHandles[0];
 	FGameplayAbilitySpecHandle& Dash = SpecHandles[1];

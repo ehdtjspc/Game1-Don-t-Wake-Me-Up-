@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/Abilities/G1GameplayAbility.h"
+#include "AbilitySystem/CharactorAbility/CharactorAbilities/G1GameplayAbility.h"
 #include "G1GameplayAbility_DontBotherMe.generated.h"
 
 /**

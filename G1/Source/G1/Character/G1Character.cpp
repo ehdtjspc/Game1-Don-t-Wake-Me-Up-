@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Character/G1Character.h"
@@ -8,9 +8,11 @@
 #include "G1Define.h"
 #include "Components/WidgetComponent.h"
 #include "UI/G1HpBarUI.h"
-#include "AbilitySystem/G1AbilitySystemComponent.h"
-#include "AbilitySystem/Attributes/G1AttributeSet.h"
-
+#include "AbilitySystem/CharactorAbility/CharactorAbilitySystemComponent.h"
+#include "AbilitySystem/CharactorAbility/CharactorAttributes/G1AttributeSet.h"
+#include "AI/G1AIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
 
 // Sets default values
 AG1Character::AG1Character()
@@ -99,8 +101,20 @@ void AG1Character::OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker)
 
 void AG1Character::OnDead(TObjectPtr<AG1Character> Attacker)
 {
-
 	PlayAnimMontage(DieMontage);
+
+	AG1AIController* AIController = Cast<AG1AIController>(GetController());
+	if (AIController)
+	{
+		// 비헤이비어 트리 강제 종료
+		UBehaviorTreeComponent* BTComp = Cast<UBehaviorTreeComponent>(AIController->GetBrainComponent());
+		if (BTComp)
+		{
+			BTComp->StopTree(EBTStopMode::Forced); 
+		}
+
+
+	}
 }
 
 void AG1Character::RefreshHpBarRatio()
@@ -128,7 +142,7 @@ void AG1Character::InitAbilitySystem()
 
 void AG1Character::AddCharacterAbilities()
 {
-	UG1AbilitySystemComponent* ASC =Cast<UG1AbilitySystemComponent>(AbilitySystemComponent);
+	UCharactorAbilitySystemComponent* ASC =Cast<UCharactorAbilitySystemComponent>(AbilitySystemComponent);
 	if (ASC == nullptr)
 	{
 		return;

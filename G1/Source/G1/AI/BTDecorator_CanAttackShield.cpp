@@ -30,7 +30,7 @@ bool UBTDecorator_CanAttackShield::CalculateRawConditionValue(UBehaviorTreeCompo
 		return false;
 	}
 	bool bIsInRange;
-	return(bIsInRange = FVector::Dist(Target2->GetActorLocation(), ControllingPawn->GetActorLocation()) < 800);
+	return(bIsInRange = FVector::Dist(Target2->GetActorLocation(), ControllingPawn->GetActorLocation()) < 800 && CreatureState != ECreatureState::Dead );
 
 
 }

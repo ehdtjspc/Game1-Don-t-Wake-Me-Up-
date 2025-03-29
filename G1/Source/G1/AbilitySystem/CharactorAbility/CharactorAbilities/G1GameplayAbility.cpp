@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AbilitySystem/Abilities/G1GameplayAbility.h"
+#include "AbilitySystem/CharactorAbility/CharactorAbilities/G1GameplayAbility.h"
 

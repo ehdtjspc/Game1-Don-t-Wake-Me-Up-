@@ -3,22 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "G1GameplayTags.h"
-#include "AbilitySystem/Abilities/G1GameplayAbility.h"
-#include "G1GameplayAbility_Dash.generated.h"
+#include "AbilitySystem/CharactorAbility/CharactorAbilities/G1GameplayAbility.h"
+#include "G1GameplayAbility_Attack.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class G1_API UG1GameplayAbility_Dash : public UG1GameplayAbility
+class G1_API UG1GameplayAbility_Attack : public UG1GameplayAbility
 {
 	GENERATED_BODY()
-
-public:
-	UG1GameplayAbility_Dash(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	
-
+public:
+	UG1GameplayAbility_Attack(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 protected:
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const override;
@@ -28,21 +25,5 @@ protected:
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UAnimMontage> AttackMontage;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Tags")
-	FGameplayTag Tags;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class UG1AbilitySystemComponent> AbilitySystemComponent;
-
-	//대쉬 관련 코드
-	float DashDistance = 1000.f;
-	float DashTime = 0.2f;
-	bool bCanDash = true;
-	float DashColldownTime = 5.0f;
-
-
-
-
 
 };
