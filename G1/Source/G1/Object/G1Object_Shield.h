@@ -6,6 +6,7 @@
 #include "Object/G1Object.h"
 #include "G1Object_Shield.generated.h"
 
+class UShieldAbilitySystemComponent;
 /**
  * 
  */
@@ -25,4 +26,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
+public:
+	virtual UShieldAbilitySystemComponent* GetShieldAbilitySystemComponent();
+	virtual void InitAbilityStstem();
+protected:
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	TObjectPtr<class UShieldAbilitySystemComponent> ShieldAbilitySystemComponent;
+
+	UPROPERTY()
+	TObjectPtr<class UG1ObjectAttributeSet> ShieldAttributeSet;
+
 };

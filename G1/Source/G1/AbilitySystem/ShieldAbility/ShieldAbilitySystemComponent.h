@@ -14,4 +14,6 @@ class G1_API UShieldAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
 	
+
+
 };
