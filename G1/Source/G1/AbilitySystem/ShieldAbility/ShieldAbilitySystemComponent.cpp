@@ -2,4 +2,6 @@
 
 
 #include "AbilitySystem/ShieldAbility/ShieldAbilitySystemComponent.h"
+#include "G1GameplayTags.h"
+
 

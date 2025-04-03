@@ -4,6 +4,7 @@
 #include "Character/Monster/G1Monster.h"
 #include "AbilitySystem/CharactorAbility/CharactorAbilitySystemComponent.h"
 #include "AbilitySystem/CharactorAbility/CharactorAttributes/MonsterSet/G1MonsterSet.h"
+#include "AI/G1AIController.h"
 
 
 AG1Monster::AG1Monster()
@@ -20,6 +21,7 @@ void AG1Monster::BeginPlay()
 	Super::BeginPlay();
 
 	InitAbilitySystem();
+
 }
 
 void AG1Monster::Tick(float DeltaTime)
@@ -41,5 +43,33 @@ void AG1Monster::OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker)
 
 void AG1Monster::AttackAction()
 {
-	PlayAnimMontage(AttackMontage);
+	/*AG1AIController* Pc = Cast<AG1AIController>(GetController());
+	if (Pc)
+	{
+		Pc->PlayerAttack();
+	}
+	*/
+	PlayerAttack();
 }
+
+void AG1Monster::PlayerAttack()
+{
+	PlayAnimMontage(AttackMontage);
+
+}
+
+void AG1Monster::HandleGameplayEvent(FGameplayTag EventTag)
+{
+	AG1AIController* PC = Cast<AG1AIController>(GetController());
+
+	if (CreatureState != ECreatureState::Dead)
+	{
+		if (PC)
+		{
+			PC->HandleGameplayEvent(EventTag);
+		}
+	}
+}
+
+
+

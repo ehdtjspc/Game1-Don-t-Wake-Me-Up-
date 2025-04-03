@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/G1Character.h"
 #include "G1Define.h"
+#include "GameplayTagContainer.h"
 #include "G1Monster.generated.h"
 
 /**
@@ -29,10 +30,13 @@ public:
 
 	void AttackAction();
 
-public:
+	void PlayerAttack();
 
+	virtual void HandleGameplayEvent(FGameplayTag EventTag);
+
+
+public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UAnimMontage> AttackMontage;
-
 
 };
