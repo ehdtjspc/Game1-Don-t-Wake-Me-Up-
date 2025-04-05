@@ -80,6 +80,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<class AG1Player> G1Player;
 
+
+
 	UPROPERTY(BlueprintReadOnly)
 	TArray<AActor*> ActorsToIgnore;
 

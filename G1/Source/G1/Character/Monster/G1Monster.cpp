@@ -41,6 +41,17 @@ void AG1Monster::OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker)
 	Super::OnDamaged(Damage,Attacker);
 }
 
+void AG1Monster::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	AG1AIController* AIController = Cast<AG1AIController>(NewController);
+	if (AIController)
+	{
+		AIController->SetControlledMonster(this);
+	}
+}
+
 void AG1Monster::AttackAction()
 {
 	/*AG1AIController* Pc = Cast<AG1AIController>(GetController());

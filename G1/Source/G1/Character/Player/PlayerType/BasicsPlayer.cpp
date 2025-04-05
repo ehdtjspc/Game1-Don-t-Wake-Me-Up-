@@ -21,7 +21,11 @@ void ABasicsPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+	AG1PlayerState* G1State = Cast<AG1PlayerState>(GetPlayerState());
+	if (G1State)
+	{
+		G1State->SetScore(0.0f);
+	}
 }
 
 void ABasicsPlayer::PossessedBy(AController* NewController)

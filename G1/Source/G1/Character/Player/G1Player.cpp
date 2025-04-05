@@ -79,6 +79,12 @@ void AG1Player::InitAbilitySystem()
 void AG1Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (AG1PlayerState* G1PlayerState = GetPlayerState<AG1PlayerState>())
+	{
+		float ScoreCheck = G1PlayerState->GetScore();
+
+	}
 }
 
 void AG1Player::HandleGameplayEvent(FGameplayTag EventTag)

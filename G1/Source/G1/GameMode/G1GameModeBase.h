@@ -16,12 +16,14 @@ class G1_API AG1GameModeBase : public AGameModeBase
 
 public:
 	AG1GameModeBase();
-	
+	void OnGameOver();
+
 
 protected:
 	virtual void BeginPlay() override;
-	
 private:
+
+
 
 
 };

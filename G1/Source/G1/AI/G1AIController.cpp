@@ -28,6 +28,11 @@ void AG1AIController::HandleGameplayEvent(FGameplayTag EventTag)
 	}
 }
 
+void AG1AIController::SetControlledMonster(AG1Monster* Monster)
+{
+	G1Monster = Monster;
+}
+
 void AG1AIController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -43,37 +48,41 @@ void AG1AIController::Tick(float DeltaTime)
 
 void AG1AIController::PlayerAttack()
 {
-	FVector StartLocation = G1Monster->GetActorLocation();
-	FVector ForwardVector = G1Monster->GetActorForwardVector();
-	FVector EndLocation = StartLocation + ForwardVector * 150.0f;
-
-	TArray<FHitResult> HitResults;
-
-	ActorsToIgnore;
-	ActorsToIgnore.Add(G1Monster);
-
-	if (UKismetSystemLibrary::SphereTraceMulti(GetWorld(), StartLocation, EndLocation, 50.0f, UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true))
+	if (G1Monster)
 	{
-		for (const FHitResult HitResult : HitResults)
+		FVector StartLocation = G1Monster->GetActorLocation();   //오류발생
+		FVector ForwardVector = G1Monster->GetActorForwardVector();
+		FVector EndLocation = StartLocation + ForwardVector * 150.0f;
+
+		TArray<FHitResult> HitResults;
+
+		ActorsToIgnore;
+		ActorsToIgnore.Add(G1Monster);
+
+		if (UKismetSystemLibrary::SphereTraceMulti(GetWorld(), StartLocation, EndLocation, 50.0f, UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1), false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResults, true))
 		{
-			AActor* HitActor = HitResult.GetActor();
-
-			if (HitActor) // HitActor 유효성 확인
+			for (const FHitResult HitResult : HitResults)
 			{
-				AG1Player* Player = Cast<AG1Player>(HitActor); // AG1Monster 타입으로 캐스팅
-				if (Player) // 캐스팅 성공 확인
-				{
-					// 플레이어와 타격 대상 사이의 거리 계산
-					float Distance = FVector::Dist(G1Monster->GetActorLocation(), HitActor->GetActorLocation());
+				AActor* HitActor = HitResult.GetActor();
 
-					// 거리가 150 이하일 경우에만 OnDamaged 호출
-					if (Distance <= 160.0f)
+				if (HitActor) // HitActor 유효성 확인
+				{
+					AG1Player* Player = Cast<AG1Player>(HitActor); // AG1Monster 타입으로 캐스팅
+					if (Player) // 캐스팅 성공 확인
 					{
-						// OnDamaged 함수 호출
-						Player->OnDamaged(10, G1Monster);
+						// 플레이어와 타격 대상 사이의 거리 계산
+						float Distance = FVector::Dist(G1Monster->GetActorLocation(), HitActor->GetActorLocation());
+
+						// 거리가 150 이하일 경우에만 OnDamaged 호출
+						if (Distance <= 160.0f)
+						{
+							// OnDamaged 함수 호출
+							Player->OnDamaged(10, G1Monster);
+						}
 					}
 				}
 			}
 		}
 	}
+
 }

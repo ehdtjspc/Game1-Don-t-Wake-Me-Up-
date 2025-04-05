@@ -28,11 +28,14 @@ public:
 
 	virtual void OnDamaged(int32 Damage, TObjectPtr<AG1Character> Attacker) override;
 
+	virtual void PossessedBy(AController* NewController) override;
+
 	void AttackAction();
 
 	void PlayerAttack();
 
 	virtual void HandleGameplayEvent(FGameplayTag EventTag);
+
 
 
 public:

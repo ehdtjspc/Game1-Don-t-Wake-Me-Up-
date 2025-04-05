@@ -30,9 +30,6 @@ void ASpawnManager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
-	GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Cyan, TEXT("avasfdasd"));
-
-
 }
 
 // Called to bind functionality to input

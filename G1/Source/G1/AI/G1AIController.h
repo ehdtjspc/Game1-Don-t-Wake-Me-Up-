@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Character/Monster/G1Monster.h"
 #include "GameplayTagContainer.h"
 #include "G1AIController.generated.h"
 
@@ -20,6 +21,9 @@ public:
 	virtual void OnPossess(APawn* InPawn) override;
 	void PlayerAttack();
 	virtual void HandleGameplayEvent(FGameplayTag EventTag);
+	void SetControlledMonster(AG1Monster* Monster);
+
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;

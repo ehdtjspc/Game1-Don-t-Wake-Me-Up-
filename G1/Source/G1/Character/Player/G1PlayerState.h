@@ -27,6 +27,7 @@ public:
 	UAbilitySystemComponent* GetG1AbilitySystemComponent() const;
 	UG1PlayerSet* GetG1PlayerSet() const;
 
+	virtual void SetScore(const float NewScore);
 
 protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
@@ -34,4 +35,6 @@ protected:
 	
 	UPROPERTY()
 	TObjectPtr<UG1PlayerSet> PlayerSet;
+
+	
 };

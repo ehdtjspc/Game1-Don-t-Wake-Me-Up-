@@ -13,6 +13,7 @@
 #include "AI/G1AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
+#include "Character/Player/G1PlayerState.h"
 
 // Sets default values
 AG1Character::AG1Character()
@@ -110,7 +111,25 @@ void AG1Character::OnDead(TObjectPtr<AG1Character> Attacker)
 		UBehaviorTreeComponent* BTComp = Cast<UBehaviorTreeComponent>(AIController->GetBrainComponent());
 		if (BTComp)
 		{
-			BTComp->StopTree(EBTStopMode::Forced); 
+
+			AG1PlayerState* G1State = Attacker->GetPlayerState<AG1PlayerState>();
+			if (G1State)
+			{
+				float CurrentScrore = G1State->GetScore();
+				G1State->SetScore(CurrentScrore + 1.0f);
+
+				float ScoreCheck = G1State->GetScore();
+
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(
+						-1, 5.0f, FColor::Green,
+						FString::Printf(TEXT("현재 점수: %.0f"), ScoreCheck)
+					);
+				}
+			}
+
+			BTComp->StopTree(EBTStopMode::Forced);
 		}
 
 
