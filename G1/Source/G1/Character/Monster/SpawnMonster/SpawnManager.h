@@ -31,10 +31,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnMonster();
 
+	void BossSpawn();
 
 	//몬스터 클래스 (어떤 몬스터를 소환할지 지정)
 	UPROPERTY(EditAnywhere, Category = "Spawning")
-	TSubclassOf<class AG1Monster> MonsterClass;
+	TSubclassOf<class AG1Monster> Monster1;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+	TSubclassOf<class AG1Monster> Monster2;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+	TSubclassOf<class AG1Monster> Monster3;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+	TSubclassOf<class AG1Monster> MotherMonsterBoss;
+
 
 
 	UPROPERTY()
@@ -42,5 +53,9 @@ public:
 
 	UPROPERTY()
 	TArray<FVector> SpawnLocations;
+
+
+
+	
 
 };

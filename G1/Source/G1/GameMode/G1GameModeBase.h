@@ -17,13 +17,15 @@ class G1_API AG1GameModeBase : public AGameModeBase
 public:
 	AG1GameModeBase();
 	void OnGameOver();
+	void BossSpawn();
 
 
 protected:
 	virtual void BeginPlay() override;
 private:
 
-
+	UPROPERTY()
+	TObjectPtr<class ASpawnManager> SpawnManger;
 
 
 };

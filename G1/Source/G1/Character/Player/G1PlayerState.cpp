@@ -40,7 +40,7 @@ void AG1PlayerState::SetScore(const float NewScore)
 		AG1GameModeBase* GameMode = Cast<AG1GameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 		if (GameMode)
 		{
-			GameMode->OnGameOver();
+			GameMode->BossSpawn();
 		}
 	}
 }

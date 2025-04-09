@@ -52,8 +52,28 @@ void ASpawnManager::SpawnMonster()
 	FVector RandomSpawnLocation = SpawnLocations[RandomIndex];
 	FRotator SpawnRotation = FRotator::ZeroRotator; // 기본 회전 값
 
-	AG1Monster* SpawnedMonster = GetWorld()->SpawnActor<AG1Monster>(MonsterClass, RandomSpawnLocation, SpawnRotation);
+	AG1Monster* SpawnedMonster = GetWorld()->SpawnActor<AG1Monster>(Monster1, RandomSpawnLocation, SpawnRotation);
 	
+}
+
+void ASpawnManager::BossSpawn()
+{
+	GetWorld()->GetTimerManager().ClearTimer(SpawnTimerHandle);
+
+	ASpawnAllLocation* SpawnLocationManager = Cast<ASpawnAllLocation>(UGameplayStatics::GetActorOfClass(GetWorld(), ASpawnAllLocation::StaticClass()));
+
+	SpawnLocations.Add(SpawnLocationManager->GetSpawnLocation1());
+	SpawnLocations.Add(SpawnLocationManager->GetSpawnLocation2());
+	SpawnLocations.Add(SpawnLocationManager->GetSpawnLocation3());
+	SpawnLocations.Add(SpawnLocationManager->GetSpawnLocation4());
+
+	int32 RandomIndex = FMath::RandRange(0, SpawnLocations.Num() - 1);
+	FVector RandomSpawnLocation = SpawnLocations[RandomIndex];
+	FRotator SpawnRotation = FRotator::ZeroRotator; // 기본 회전 값
+
+	AG1Monster* SpawnedMonster = GetWorld()->SpawnActor<AG1Monster>(MotherMonsterBoss, RandomSpawnLocation, SpawnRotation);
+
+
 }
 
 

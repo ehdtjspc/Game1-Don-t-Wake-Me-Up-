@@ -32,4 +32,7 @@ namespace G1GameplayTags
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_DontBotherMe);
 
 
+	// 몬스터 종류
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Monster_MonsterBoss);
+
 }

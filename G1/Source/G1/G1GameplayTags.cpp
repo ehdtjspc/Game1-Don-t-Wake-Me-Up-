@@ -29,6 +29,8 @@ namespace G1GameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Dash, "Ability.Dash");
 	UE_DEFINE_GAMEPLAY_TAG(Ability_DontBotherMe, "Ability.DontBotherMe");
 
+	UE_DEFINE_GAMEPLAY_TAG(Monster_MonsterBoss, "Monster.MonsterBoss");
+
 
 
 }
