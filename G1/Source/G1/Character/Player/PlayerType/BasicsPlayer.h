@@ -32,4 +32,7 @@ public:
 
 	virtual void ActivateAbility(FGameplayTag AbilityTag) override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+	TObjectPtr<class UStaticMeshComponent> WeaponMesh;
+
 };

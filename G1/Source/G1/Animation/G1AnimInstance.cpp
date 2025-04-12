@@ -15,7 +15,7 @@ void UG1AnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
 
-	Character = Cast<AG1Player>(TryGetPawnOwner());
+	Character = Cast<AG1Character>(TryGetPawnOwner());
 
 	if (Character)
 	{

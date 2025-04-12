@@ -34,7 +34,7 @@ void AG1PlayerState::SetScore(const float NewScore)
 {
 	Super::SetScore(NewScore);
 
-	if (NewScore >= 5.0f)
+	if (NewScore == 5.0f)
 	{
 		// 게임모드 가져오기
 		AG1GameModeBase* GameMode = Cast<AG1GameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));

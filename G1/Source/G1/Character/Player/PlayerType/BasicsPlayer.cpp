@@ -14,6 +14,10 @@
 
 ABasicsPlayer::ABasicsPlayer()
 {
+	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
+
+	WeaponMesh->SetupAttachment(RootComponent);
+
 
 }
 
@@ -26,6 +30,14 @@ void ABasicsPlayer::BeginPlay()
 	{
 		G1State->SetScore(0.0f);
 	}
+
+	if (WeaponMesh && GetMesh())
+	{
+		WeaponMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale,
+			FName("hand_socket_r"));
+	}
+
+
 }
 
 void ABasicsPlayer::PossessedBy(AController* NewController)
